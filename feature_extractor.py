@@ -1,7 +1,9 @@
 import numpy as np
 import nltk
 import igraph
+from tools import build_graph
 
+g = build_graph()
 stpwds = set(nltk.corpus.stopwords.words("english"))
 stemmer = nltk.stem.PorterStemmer()
 
