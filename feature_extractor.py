@@ -1,15 +1,26 @@
 import numpy as np
 import nltk
-# Git test
+import igraph
 
 stpwds = set(nltk.corpus.stopwords.words("english"))
 stemmer = nltk.stem.PorterStemmer()
+
+def InOutDegree(df, g):
+    # We only look at the target
+    df["target_in_degree"] = 0
+    df["target_out_degree"] = 0
+    for index, row in df.iterrows():
+        row["target_in_degree"] = g.vs.select(name=str(row["target"])).indegree()[0]
+        row["target_out_degree"] = g.vs.select(name=str(row["target"])).outdegree()[0]
+    return df
+
+
 
 # from sklearn.feature_extraction.text import TfidfVectorizer
 # vectorizer = TfidfVectorizer(stop_words="english")
 # features_TFIDF = vectorizer.fit_transform(node_information_df["abstract"])
 
-def featuresFromDataFrame(df,node_information_df,verbose = True):
+def featuresFromDataFrame(df, node_information_df, verbose=False):
     '''
     :param df: The train_df or test_df with fields "source" and "target"
     :param node_information_df: The information on which to build the features
