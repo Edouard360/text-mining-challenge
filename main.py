@@ -1,13 +1,13 @@
 import pandas as pd
 from sklearn import svm
-from feature_extractor import featuresFromDataFrame,getFeaturesFromMetric
+from feature_extractor import featuresFromDataFrame, getFeaturesFromMetric
 from tools import random_sample
 
-train_df = pd.read_csv("data/training_set.txt", sep=" ",header=None)
+train_df = pd.read_csv("data/training_set.txt", sep=" ", header=None)
 train_df.columns = ["source","target","label"]
 train_df = random_sample(train_df,p = 0.05)
 
-test_df = pd.read_csv("data/testing_set.txt", sep=" ",header=None)
+test_df = pd.read_csv("data/testing_set.txt", sep=" ", header=None)
 test_df.columns = ["source","target"]
 #test_df = random_sample(test_df,prop = 1)
 
@@ -17,7 +17,7 @@ node_information_df = node_information_df.reset_index().set_index("ID")
 node_information_df["authors"].fillna("",inplace=True)
 
 node_degree_df = pd.read_csv("preprocessing/in-out/node_degree.csv", sep=",",header=None)
-node_degree_df.columns = ["ID","indegree","outdegree"]
+node_degree_df.columns = ["ID","target_indegree","target_outdegree"]
 node_degree_df = node_degree_df.reset_index().set_index("ID")
 
 node_information_df = pd.concat((node_information_df,node_degree_df),axis=1)
