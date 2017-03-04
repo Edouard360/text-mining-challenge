@@ -1,26 +1,26 @@
 import numpy as np
+from tools import remove_stopwords_and_stem
+from scipy import sparse
 import nltk
-import igraph
+from sklearn.metrics.pairwise import cosine_similarity
+
 from tools import build_graph
 
-g = build_graph()
 stpwds = set(nltk.corpus.stopwords.words("english"))
 stemmer = nltk.stem.PorterStemmer()
 
-def InOutDegree(df, g):
-    # We only look at the target
-    df["target_in_degree"] = 0
-    df["target_out_degree"] = 0
-    for index, row in df.iterrows():
-        row["target_in_degree"] = g.vs.select(name=str(row["target"])).indegree()[0]
-        row["target_out_degree"] = g.vs.select(name=str(row["target"])).outdegree()[0]
-    return df
+def getFeaturesFromMetric(metric ="degrees", percentile = 95): #node_information_df
+    loader = np.load("preprocessing/node-abstract/node-feature-"+metric+".npz")
+    features = sparse.csr_matrix((loader['data'], loader['indices'], loader['indptr']),
+                          shape=loader['shape'])
+    E_M2 = np.array((features).multiply(features).mean(axis=0))
+    E_M_2 = np.array((features).mean(axis=0))**2
+    var = (E_M2-E_M_2)[0]
 
-
-
-# from sklearn.feature_extraction.text import TfidfVectorizer
-# vectorizer = TfidfVectorizer(stop_words="english")
-# features_TFIDF = vectorizer.fit_transform(node_information_df["abstract"])
+    # plt.plot(range(100), [np.percentile(var, i) for i in range(100)])
+    features_to_keep = (var >= np.percentile(var, percentile))
+    features = features[:, features_to_keep]
+    return features.toarray()
 
 def featuresFromDataFrame(df, node_information_df, verbose=False):
     '''
@@ -32,25 +32,38 @@ def featuresFromDataFrame(df, node_information_df, verbose=False):
     overlap_title = []
     temp_diff = []
     comm_auth = []
+    indegree = []
+    outdegree = []
+    similarity = []
+    features = getFeaturesFromMetric()
+    id_to_index = dict(zip(node_information_df.index.values, range(node_information_df.index.size)))
+
     for source, target in zip(df["source"], df["target"]):
         source_info = node_information_df.ix[source, :]
         target_info = node_information_df.ix[target, :]
 
         source_title = source_info["title"].lower().split(" ")
-        source_title = [token for token in source_title if token not in stpwds]
-        source_title = [stemmer.stem(token) for token in source_title]
+        source_title = remove_stopwords_and_stem(source_title)
 
         target_title = target_info["title"].lower().split(" ")
-        target_title = [token for token in target_title if token not in stpwds]
-        target_title = [stemmer.stem(token) for token in target_title]
+        target_title = remove_stopwords_and_stem(target_title)
 
         source_auth = source_info["authors"].split(",")
         target_auth = target_info["authors"].split(",")
 
+        indegree.append(source_info["indegree"])
+        outdegree.append(target_info["outdegree"])
+
+        similarity.append(cosine_similarity(features[id_to_index[source], :].reshape(1, -1),
+                                            features[id_to_index[target], :].reshape(1, -1))[0, 0])
+
         overlap_title.append(len(set(source_title).intersection(set(target_title))))
         temp_diff.append(int(source_info['year']) - int(target_info["year"]))
         comm_auth.append(len(set(source_auth).intersection(set(target_auth))))
+
         counter += 1
-        if verbose and (counter % 1000 == True):
+        if verbose and (counter % 1000 == 1):
             print(counter, " examples processed")
-    return np.array([overlap_title, temp_diff, comm_auth]).T
+
+    return np.array([overlap_title, temp_diff, comm_auth,indegree,outdegree,similarity]).T
+
