@@ -3,11 +3,6 @@ import igraph
 import csv
 
 def build_graph():
-    with open("testing_set.txt", "r") as f:
-        reader = csv.reader(f)
-        testing_set  = list(reader)
-    testing_set = [element[0].split(" ") for element in testing_set]
-
     with open("training_set.txt", "r") as f:
         reader = csv.reader(f)
         training_set  = list(reader)
