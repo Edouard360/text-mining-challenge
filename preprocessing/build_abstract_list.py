@@ -3,7 +3,7 @@ import pandas as pd
 import nltk
 import csv
 from scipy import sparse
-from preprocessing.library_moodle import terms_to_graph,compute_node_centrality
+from library_moodle import terms_to_graph,compute_node_centrality
 from tools import remove_stopwords_and_stem
 
 stpwds = set(nltk.corpus.stopwords.words("english"))
@@ -21,11 +21,11 @@ try:
         for line in f:
             abstract_list = abstract_list + [line[:-1].split(",")]
 except FileNotFoundError:
-with open("abstract_list.csv", "w") as f:
-    abstract_list = node_information_df["abstract"].values
-    abstract_list = [remove_stopwords_and_stem(abstract.split(" ")) for abstract in abstract_list]
-    writer = csv.writer(f)
-    writer.writerows(abstract_list)
+    with open("abstract_list.csv", "w") as f:
+        abstract_list = node_information_df["abstract"].values
+        abstract_list = [remove_stopwords_and_stem(abstract.split(" ")) for abstract in abstract_list]
+        writer = csv.writer(f)
+        writer.writerows(abstract_list)
 ########################
 
 # All the unique  words
