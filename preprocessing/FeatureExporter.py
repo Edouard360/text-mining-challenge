@@ -2,6 +2,7 @@ import pandas as pd
 from preprocessing.abstractToGraphFeatures.SimilarityFeatureExtractor import SimilarityFeatureExtractor
 from preprocessing.originalFeatures.OriginalFeatureExtractor import OriginalFeatureExtractor
 from preprocessing.inOutFeatures.InOutFeatureExtractor import InOutFeatureExtractor
+from preprocessing.intersectionFeatures.IntersectionFeatureExtractor import IntersectionFeatureExtractor
 # SimilarityFeatureExtractor=[]
 # OriginalFeatureExtractor=[]
 # InOutFeatureExtractor=[]
@@ -25,6 +26,12 @@ class FeatureExporter:
             "path":"abstractToGraphFeatures/",
             "extractor": SimilarityFeatureExtractor,
             "default_args": {"metric":"degrees", "percentile" : 0.95}
+        },
+        "intersection":{
+            "columns":["intersection"],
+            "path":"intersectionFeatures/",
+            "extractor": IntersectionFeatureExtractor,
+            "default_args": {}
         }
     }
     def __init__(self, verbose=False):

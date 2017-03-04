@@ -22,12 +22,10 @@ df_dict["train"] = {
     "filename": 'training_set.txt',
     "df": random_sample(train_df,p = 0.05)
 }
-node_degree_df = pd.read_csv("preprocessing/in-out/node_degree.csv", sep=",",header=None)
-node_degree_df.columns = ["ID","target_indegree","target_outdegree"]
-node_degree_df = node_degree_df.reset_index().set_index("ID")
-features = ["inOutDegree","original","similarity"]
 
 testing_on_train = True
+features = ["inOutDegree","original","similarity"]
+
 
 if testing_on_train:
     df_dict["test"] = {
