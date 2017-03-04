@@ -27,6 +27,8 @@ node_degree_df.columns = ["ID","target_indegree","target_outdegree"]
 node_degree_df = node_degree_df.reset_index().set_index("ID")
 features = ["inOutDegree","original","similarity"]
 
+testing_on_train = True
+
 if testing_on_train:
     df_dict["test"] = {
         "filename": 'testing_training_set.txt',
