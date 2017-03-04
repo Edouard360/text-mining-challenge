@@ -7,13 +7,10 @@ def build_graph(path=""):
     with open(path+"data/training_set.txt", "r") as f:
         reader = csv.reader(f)
         training_set  = list(reader)
-
     training_set = [element[0].split(" ") for element in training_set]
-
     with open(path+"data/node_information.csv", "r") as f:
         reader = csv.reader(f)
         node_info  = list(reader)
-
     IDs = [element[0] for element in node_info]
     edges = [(element[0],element[1]) for element in training_set if element[2]=="1"]
     ## some nodes may not be connected to any other node
