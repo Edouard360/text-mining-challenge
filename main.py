@@ -1,3 +1,4 @@
+from time import gmtime, strftime
 import pandas as pd
 from sklearn import svm
 from tools import random_sample
@@ -6,7 +7,7 @@ from preprocessing.FeatureExporter import FeatureExporter
 from preprocessing.FeatureImporter import FeatureImporter
 from sklearn.linear_model.logistic import LogisticRegression
 
-#time_sub =
+time_sub = strftime("%Y-%m-%d %H:%M:%S", gmtime()).replace(' ','__')
 
 train_df = pd.read_csv("data/training_set.txt", sep=" ", header=None)
 train_df.columns = ["source","target","label"]
@@ -20,15 +21,17 @@ node_information_df = node_information_df.reset_index().set_index("ID")
 node_information_df["authors"].fillna("", inplace=True)
 
 df_dict = dict()
+training_set_percentage = 0.05
 
 df_dict["train"] = {
     "filename": 'training_set.txt',
-    "df": random_sample(train_df,p = 0.05)
+    "df": random_sample(train_df, p=training_set_percentage)
 }
 
 testing_on_train = True
-features = ["commonNeighbours","original","inOutDegree","similarity"]
-
+#features = ["commonNeighbours", "original", "inOutDegree", "similarity"]
+#features = ["original", "inOutDegree", "similarity", "tfidf"]
+features = ["original", "inOutDegree", "similarity"]
 
 if testing_on_train:
     df_dict["test"] = {
@@ -64,10 +67,10 @@ labels_pred = classifier.predict(testing_features)
 
 if(testing_on_train):
     labels_true = df_dict["test"]["df"]["label"].values
-    print("The Area Under Curve (AUC) is ",metrics.roc_auc_score(labels_true,labels_pred))
-    print("The f1 score is ",metrics.f1_score(labels_true,labels_pred))
+    print("AUC is %f | %.2f  of training set" % (metrics.roc_auc_score(labels_true,labels_pred), training_set_percentage))
+    print("f1 score is %f | %.2f  of training set" % (metrics.f1_score(labels_true,labels_pred), training_set_percentage))
 else:
     prediction_df = pd.DataFrame(columns=["id","category"],dtype=int)
     prediction_df["id"] = range(len(labels_pred))
     prediction_df["category"] = labels_pred
-    prediction_df.to_csv("improved_predictions.csv",index=None)
+    prediction_df.to_csv("submissions/improved_predictions_of_"+time_sub+".csv",index=None)

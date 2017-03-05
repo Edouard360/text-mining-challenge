@@ -5,7 +5,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 from preprocessing.abstractToGraphFeatures.abstract_to_graph import abstractToGraph
 
 class SimilarityFeatureExtractor(FeatureExtractor):
-    def __init__(self, node_information,**kargs):
+    def __init__(self, node_information, **kargs):
         super(SimilarityFeatureExtractor, self).__init__(node_information)
         self.similarity = []
         self.id_to_index = dict(zip(self.node_information_df.index.values, range(self.node_information_df.index.size)))

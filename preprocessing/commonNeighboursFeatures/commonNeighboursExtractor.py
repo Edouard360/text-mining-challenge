@@ -5,7 +5,7 @@ from tools import build_graph
 import igraph
 
 class CommonNeighboursFeatureExtractor(FeatureExtractor):
-    def __init__(self,node_information,**kargs):
+    def __init__(self, node_information, **kargs):
         super(CommonNeighboursFeatureExtractor, self).__init__(node_information)
         self.id_to_index = dict(zip(self.node_information_df.index.values, range(self.node_information_df.index.size)))
         try:
@@ -36,4 +36,3 @@ class CommonNeighboursFeatureExtractor(FeatureExtractor):
 
     def concatFeature(self):
         return np.array([self.commonNeighbours]).T
-

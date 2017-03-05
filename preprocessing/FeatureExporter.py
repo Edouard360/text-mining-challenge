@@ -4,6 +4,7 @@ from preprocessing.originalFeatures.OriginalFeatureExtractor import OriginalFeat
 from preprocessing.inOutFeatures.InOutFeatureExtractor import InOutFeatureExtractor
 from preprocessing.commonNeighboursFeatures.commonNeighboursExtractor import CommonNeighboursFeatureExtractor
 from preprocessing.intersectionFeatures.IntersectionFeatureExtractor import IntersectionFeatureExtractor
+from preprocessing.tfidfFeatures.TfidfFeatureExtractor import TfidfFeatureExtractor
 
 class FeatureExporter:
     available_features = {
@@ -14,7 +15,7 @@ class FeatureExporter:
             "default_args":{}
         },
         "inOutDegree":{
-            "columns":["indegree","outdegree"],
+            "columns":["indegree","outdegree"],# A changer avec target_indegree for clarity (EDOUARD T NUL)
             "path":"inOutFeatures/",
             "extractor": InOutFeatureExtractor,
             "default_args":{}
@@ -35,6 +36,12 @@ class FeatureExporter:
             "columns":["commonNeighbours"],
             "path":"commonNeighboursFeatures/",
             "extractor": CommonNeighboursFeatureExtractor,
+            "default_args": {}
+        },
+        "tfidf":{
+            "columns":["tfidf_similarity"],
+            "path":"tfidfFeatures/",
+            "extractor": TfidfFeatureExtractor,
             "default_args": {}
         }
     }
