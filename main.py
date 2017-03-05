@@ -29,7 +29,8 @@ df_dict["train"] = {
 }
 
 testing_on_train = True
-features = ["commonNeighbours","original","inOutDegree","similarity"]
+#features = ["commonNeighbours","original","inOutDegree","similarity"]
+features = ["commonNeighbours","tfidf","original","inOutDegree","similarity"]
 # By uncommenting you can tune in the parameters
 parameters = {}
 # parameters = {"percentile":95,"metric":"w_degrees"}
