@@ -41,7 +41,7 @@ def abstractToGraph(path = ""):
     for m in metrics:
         features_dict[m] = sparse.lil_matrix((len(abstract_list),len(unique_words)))
 
-    print("Computing centrality for all Graphs")
+    print("Computing metrics")
     for i,graph in enumerate(graphs):
         for row in compute_node_centrality(graph):
             col_index = index_dict[row[0]]

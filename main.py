@@ -4,6 +4,7 @@ from tools import random_sample
 from sklearn import metrics
 from preprocessing.FeatureExporter import FeatureExporter
 from preprocessing.FeatureImporter import FeatureImporter
+from sklearn.linear_model.logistic import LogisticRegression
 
 train_df = pd.read_csv("data/training_set.txt", sep=" ",header=None)
 train_df.columns = ["source","target","label"]
@@ -22,8 +23,8 @@ df_dict["train"] = {
     "df": random_sample(train_df,p = 0.05)
 }
 
-testing_on_train = True
-features = ["inOutDegree","original","similarity"]
+testing_on_train = False
+features = ["commonNeighbours","original","inOutDegree","similarity"]
 
 if testing_on_train:
     df_dict["test"] = {
@@ -37,9 +38,11 @@ else:
     }
 
 for key,value in df_dict.items():
+    # exporter.computeFeature(value["df"], node_information_df, "similarity", percentile=0.97)
+    # exporter.exportTo(value["filename"])
     if not FeatureImporter.check(value["filename"],features=features):
-        exporter = FeatureExporter(True)
         for feature in features:
+            exporter = FeatureExporter(True)
             print("Exporting for "+key+", the feature "+feature)
             if not FeatureImporter.check(value["filename"],features=[feature]):
                 exporter.computeFeature(value["df"],node_information_df,feature)
@@ -51,12 +54,15 @@ testing_features = FeatureImporter.importFromFile(df_dict["test"]["filename"], f
 labels = df_dict["train"]["df"]["label"].values
 
 classifier = svm.LinearSVC()
+classifier = LogisticRegression()
 classifier.fit(training_features, labels)
 labels_pred = classifier.predict(testing_features)
+labels_pred_proba = classifier.predict_proba(testing_features)[:,1]
 
 if(testing_on_train):
     labels_true = df_dict["test"]["df"]["label"].values
     print("The Area Under Curve (AUC) is ",metrics.roc_auc_score(labels_true,labels_pred))
+    print("The f1 score is ",metrics.f1_score(labels_true,labels_pred_proba))
 else:
     prediction_df = pd.DataFrame(columns=["id","category"],dtype=int)
     prediction_df["id"] = range(len(labels_pred))
