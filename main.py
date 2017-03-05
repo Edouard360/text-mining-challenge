@@ -20,13 +20,15 @@ node_information_df["authors"].fillna("", inplace=True)
 df_dict = dict()
 
 df_dict["train"] = {
-    "filename": 'training_set.txt',
-    "df": random_sample(train_df,p = 0.05)
+    "filename": 'training_set_plus.txt',
+    "df": random_sample(train_df,p = 0.2)
 }
 
 testing_on_train = False
 features = ["commonNeighbours","original","inOutDegree","similarity"]
-
+# By uncommenting you can tune in the parameters
+parameters = {}
+# parameters = {"percentile":95,"metric":"w_degrees"}
 
 if testing_on_train:
     df_dict["test"] = {
@@ -40,18 +42,16 @@ else:
     }
 
 for key,value in df_dict.items():
-    # exporter.computeFeature(value["df"], node_information_df, "similarity", percentile=0.97)
-    # exporter.exportTo(value["filename"])
-    if not FeatureImporter.check(value["filename"],features=features):
+    if not FeatureImporter.check(value["filename"],features=features,**parameters):
         for feature in features:
             exporter = FeatureExporter(True)
-            print("Exporting for "+key+", the feature "+feature)
-            if not FeatureImporter.check(value["filename"],features=[feature]):
-                exporter.computeFeature(value["df"],node_information_df,feature)
-                exporter.exportTo(value["filename"])
+            if not FeatureImporter.check(value["filename"],features=[feature],**parameters):
+                print("Exporting for " + key + " the feature " + feature)
+                exporter.computeFeature(value["df"],node_information_df,feature,**parameters)
+                exporter.exportTo(value["filename"],feature,**parameters)
 
-training_features = FeatureImporter.importFromFile(df_dict["train"]["filename"], features=features)
-testing_features = FeatureImporter.importFromFile(df_dict["test"]["filename"], features=features)
+training_features = FeatureImporter.importFromFile(df_dict["train"]["filename"], features=features,**parameters)
+testing_features = FeatureImporter.importFromFile(df_dict["test"]["filename"], features=features,**parameters)
 
 labels = df_dict["train"]["df"]["label"].values
 
@@ -63,8 +63,8 @@ labels_pred_proba = classifier.predict_proba(testing_features)[:,1]
 
 if(testing_on_train):
     labels_true = df_dict["test"]["df"]["label"].values
-    print("The Area Under Curve (AUC) is ",metrics.roc_auc_score(labels_true,labels_pred))
-    print("The f1 score is ",metrics.f1_score(labels_true,labels_pred_proba))
+    print("The Area Under Curve (AUC) is ",metrics.roc_auc_score(labels_true,labels_pred_proba))
+    print("The f1 score is ",metrics.f1_score(labels_true,labels_pred))
 else:
     prediction_df = pd.DataFrame(columns=["id","category"],dtype=int)
     prediction_df["id"] = range(len(labels_pred))

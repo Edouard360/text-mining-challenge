@@ -53,3 +53,20 @@ def abstractToGraph(path = ""):
         csr_matrix = features_dict[m].tocsr()
         np.savez("preprocessing/abstractToGraphFeatures/metrics/"+m, data=csr_matrix.data, indices=csr_matrix.indices,
                  indptr=csr_matrix.indptr, shape=csr_matrix.shape)
+
+    print("Now computing tf-idf metric")
+    idf = np.zeros(len(unique_words))
+    tf = sparse.lil_matrix((len(abstract_list), len(unique_words)))
+    count = 1
+    for i,abstract in enumerate(abstract_list):
+        for word in set(abstract):
+            idf[index_dict[word]] += 1
+        for word in abstract:
+            tf[i,index_dict[word]]+=1
+        if(count %10000 ==1 ):
+            print(count,"abstracts treated")
+        count += 1
+
+    csr_tfidf = (tf @ (sparse.diags(1 / idf))).tocsr()
+    np.savez("preprocessing/abstractToGraphFeatures/metrics/tfidf", data=csr_tfidf.data, indices=csr_tfidf.indices,
+             indptr=csr_tfidf.indptr, shape=csr_tfidf.shape)
