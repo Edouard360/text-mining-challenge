@@ -13,8 +13,6 @@ node_information_df = pd.read_csv("data/node_information.csv", sep=",",header=No
 node_information_df.columns = ["ID","year","title","authors","journalName","abstract"]
 node_information_df = node_information_df.reset_index().set_index("ID")
 
-# Not working AON
-########################
 try:
     with open('abstract_list.csv', 'r') as f:
         abstract_list = []
@@ -26,7 +24,6 @@ except FileNotFoundError:
         abstract_list = [remove_stopwords_and_stem(abstract.split(" ")) for abstract in abstract_list]
         writer = csv.writer(f)
         writer.writerows(abstract_list)
-########################
 
 # All the unique  words
 concatenated_abstracts = np.concatenate(tuple(abstract_list))
