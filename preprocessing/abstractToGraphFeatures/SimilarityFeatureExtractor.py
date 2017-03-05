@@ -22,7 +22,7 @@ class SimilarityFeatureExtractor(FeatureExtractor):
         else:
             percentile = kargs["percentile"]
 
-        assert metric in ["closeness","degrees","w_closeness","w_degrees"] ,"You should select an available metric"
+        assert metric in ["closeness","degrees","w_closeness","w_degrees","tfidf"] ,"You should select an available metric"
         try:
             loader = np.load("preprocessing/abstractToGraphFeatures/metrics/" + metric + ".npz")
         except Exception:
