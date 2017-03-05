@@ -6,9 +6,10 @@ from preprocessing.FeatureExporter import FeatureExporter
 from preprocessing.FeatureImporter import FeatureImporter
 from sklearn.linear_model.logistic import LogisticRegression
 
-train_df = pd.read_csv("data/training_set.txt", sep=" ",header=None)
+train_df = pd.read_csv("data/training_set.txt", sep=" ", header=None)
 train_df.columns = ["source","target","label"]
-test_df = pd.read_csv("data/testing_set.txt", sep=" ",header=None)
+
+test_df = pd.read_csv("data/testing_set.txt", sep=" ", header=None)
 test_df.columns = ["source","target"]
 
 node_information_df = pd.read_csv("data/node_information.csv", sep=",", header=None)
@@ -25,6 +26,7 @@ df_dict["train"] = {
 
 testing_on_train = False
 features = ["commonNeighbours","original","inOutDegree","similarity"]
+
 
 if testing_on_train:
     df_dict["test"] = {

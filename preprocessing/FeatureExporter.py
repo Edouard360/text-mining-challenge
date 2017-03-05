@@ -3,6 +3,7 @@ from preprocessing.abstractToGraphFeatures.SimilarityFeatureExtractor import Sim
 from preprocessing.originalFeatures.OriginalFeatureExtractor import OriginalFeatureExtractor
 from preprocessing.inOutFeatures.InOutFeatureExtractor import InOutFeatureExtractor
 from preprocessing.commonNeighboursFeatures.commonNeighboursExtractor import CommonNeighboursFeatureExtractor
+from preprocessing.intersectionFeatures.IntersectionFeatureExtractor import IntersectionFeatureExtractor
 
 class FeatureExporter:
     available_features = {
@@ -23,6 +24,12 @@ class FeatureExporter:
             "path":"abstractToGraphFeatures/",
             "extractor": SimilarityFeatureExtractor,
             "default_args": {"metric":"degrees", "percentile" : 0.95}
+        },
+        "intersection":{
+            "columns":["intersection"],
+            "path":"intersectionFeatures/",
+            "extractor": IntersectionFeatureExtractor,
+            "default_args": {}
         },
         "commonNeighbours":{
             "columns":["commonNeighbours"],

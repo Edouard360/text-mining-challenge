@@ -14,5 +14,3 @@ class FeatureImporter:
         path_list = ["preprocessing/" + value["path"] + "output/" + filename for key, value in
                      FeatureExporter.available_features.items() if key in features]
         return all(os.path.isfile(path) for path in path_list)
-
-
