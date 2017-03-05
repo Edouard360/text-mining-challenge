@@ -29,9 +29,10 @@ df_dict["train"] = {
 }
 
 testing_on_train = True
-#features = ["commonNeighbours", "original", "inOutDegree", "similarity"]
-#features = ["original", "inOutDegree", "similarity", "tfidf"]
-features = ["original", "inOutDegree", "similarity"]
+features = ["commonNeighbours","original","inOutDegree","similarity"]
+# By uncommenting you can tune in the parameters
+parameters = {}
+# parameters = {"percentile":95,"metric":"w_degrees"}
 
 if testing_on_train:
     df_dict["test"] = {
@@ -45,18 +46,16 @@ else:
     }
 
 for key,value in df_dict.items():
-    # exporter.computeFeature(value["df"], node_information_df, "similarity", percentile=0.97)
-    # exporter.exportTo(value["filename"])
-    if not FeatureImporter.check(value["filename"],features=features):
+    if not FeatureImporter.check(value["filename"],features=features,**parameters):
         for feature in features:
             exporter = FeatureExporter(True)
-            print("Exporting for "+key+", the feature "+feature)
-            if not FeatureImporter.check(value["filename"],features=[feature]):
-                exporter.computeFeature(value["df"],node_information_df,feature)
-                exporter.exportTo(value["filename"])
+            if not FeatureImporter.check(value["filename"],features=[feature],**parameters):
+                print("Exporting for " + key + " the feature " + feature)
+                exporter.computeFeature(value["df"],node_information_df,feature,**parameters)
+                exporter.exportTo(value["filename"],feature,**parameters)
 
-training_features = FeatureImporter.importFromFile(df_dict["train"]["filename"], features=features)
-testing_features = FeatureImporter.importFromFile(df_dict["test"]["filename"], features=features)
+training_features = FeatureImporter.importFromFile(df_dict["train"]["filename"], features=features,**parameters)
+testing_features = FeatureImporter.importFromFile(df_dict["test"]["filename"], features=features,**parameters)
 
 labels = df_dict["train"]["df"]["label"].values
 
