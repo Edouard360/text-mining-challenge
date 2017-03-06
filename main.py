@@ -1,8 +1,10 @@
 from time import gmtime, strftime
 import pandas as pd
+from classifier import Classifier
 from sklearn import svm
 from tools import random_sample
 from sklearn import metrics
+
 from preprocessing.FeatureExporter import FeatureExporter
 from preprocessing.FeatureImporter import FeatureImporter
 from sklearn.linear_model.logistic import LogisticRegression
@@ -28,10 +30,10 @@ df_dict["train"] = {
     "df": random_sample(train_df, p=training_set_percentage)
 }
 
-testing_on_train = True
-#features = ["commonNeighbours","original","inOutDegree","similarity"]
-#features = ["commonNeighbours","tfidf","original","inOutDegree","similarity"]
-features = ["original","inOutDegree","similarity"]
+testing_on_train = False
+# features = ["commonNeighbours","original","inOutDegree","similarity"]
+features = ["commonNeighbours","tfidf","original","inOutDegree","similarity"]
+#features = ["original","inOutDegree","similarity"]
 # By uncommenting you can tune in the parameters
 parameters = {}
 # parameters = {"percentile":95,"metric":"w_degrees"}
@@ -61,14 +63,18 @@ testing_features = FeatureImporter.importFromFile(df_dict["test"]["filename"], f
 
 labels = df_dict["train"]["df"]["label"].values
 
-classifier = svm.LinearSVC()
-classifier = LogisticRegression()
+classifier = Classifier()
+# classifier = LogisticRegression()
 classifier.fit(training_features, labels)
 labels_pred = classifier.predict(testing_features)
 
 if(testing_on_train):
     labels_true = df_dict["test"]["df"]["label"].values
-    print ("features : ", features)
+    print ("Features : ", features)
+    if hasattr(classifier, 'name'):
+        print ("Classifier : ", classifier.name)
+    else:
+        print ("Classifier : ", str(classifier))
     print("AUC is %f | %.2f  of training set" % (metrics.roc_auc_score(labels_true,labels_pred), training_set_percentage))
     print("f1 score is %f | %.2f  of training set" % (metrics.f1_score(labels_true,labels_pred), training_set_percentage))
 else:
