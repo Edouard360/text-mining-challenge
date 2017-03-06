@@ -30,7 +30,8 @@ df_dict["train"] = {
 
 testing_on_train = True
 #features = ["commonNeighbours","original","inOutDegree","similarity"]
-features = ["commonNeighbours","tfidf","original","inOutDegree","similarity"]
+#features = ["commonNeighbours","tfidf","original","inOutDegree","similarity"]
+features = ["original","inOutDegree","similarity"]
 # By uncommenting you can tune in the parameters
 parameters = {}
 # parameters = {"percentile":95,"metric":"w_degrees"}
@@ -67,6 +68,7 @@ labels_pred = classifier.predict(testing_features)
 
 if(testing_on_train):
     labels_true = df_dict["test"]["df"]["label"].values
+    print ("features : ", features)
     print("AUC is %f | %.2f  of training set" % (metrics.roc_auc_score(labels_true,labels_pred), training_set_percentage))
     print("f1 score is %f | %.2f  of training set" % (metrics.f1_score(labels_true,labels_pred), training_set_percentage))
 else:
