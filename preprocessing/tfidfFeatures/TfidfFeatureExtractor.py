@@ -66,7 +66,7 @@ class TfidfFeatureExtractor(FeatureExtractor):
                     tfidf_similarity.append(0)
             concatenated_df["tfidf_similarity"] = tfidf_similarity
             print("Exporting tfidf_similarity to preprocessing/tfidfFeatures/tfidf_similarity.csv")
-            concatenated_df.to_csv("preprocessing/tfidfFeatures/tfidf_similarity.csv",index=False)
+            concatenated_df.to_csv("preprocessing/tfidfFeatures/tfidf_similarity.csv", index=False)
             tfidf_similarity_df = pd.read_csv("preprocessing/tfidfFeatures/tfidf_similarity.csv")
         self.tfidf_similarity_df = tfidf_similarity_df.set_index(["source","target"])
         self.tfidf_mean = []

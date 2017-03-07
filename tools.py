@@ -60,7 +60,8 @@ def build_authors_graph(path=""):
                 for author_target in authors[id_to_index[int(element[1])]]:
                     dict_edges[(author_source,author_target)]+=1
 
-    '''a = list(dict_edges.keys())
+    '''
+    a = list(dict_edges.keys())
     b = [(y,x) for x,y in a]
     tmp = list(set(a) & set(b))
     authors_graph = igraph.Graph(directed=True)

@@ -5,7 +5,7 @@ from preprocessing.inOutFeatures.InOutFeatureExtractor import InOutFeatureExtrac
 from preprocessing.commonNeighboursFeatures.commonNeighboursExtractor import CommonNeighboursFeatureExtractor
 from preprocessing.intersectionFeatures.IntersectionFeatureExtractor import IntersectionFeatureExtractor
 from preprocessing.tfidfFeatures.TfidfFeatureExtractor import TfidfFeatureExtractor
-from preprocessing.tfidfFeatures2.TfidfFeatureExtractor2 import TfidfFeatureExtractor2
+from preprocessing.authorsFeatures.AuthorsFeatureExtractor import AuthorsFeatureExtractor
 
 class FeatureExporter:
     available_features = {
@@ -45,10 +45,10 @@ class FeatureExporter:
             "extractor": TfidfFeatureExtractor,
             "default_args": {}
         },
-        "tfidf2":{
-        "columns": ["tfidf_similarity_2"],
-        "path": "tfidfFeatures2/",
-        "extractor": TfidfFeatureExtractor2,
+        "authors":{
+        "columns": ["meanAuthorsCitation"],
+        "path": "authorsFeatures/",
+        "extractor": AuthorsFeatureExtractor,
         "default_args": {}
     }
     }
