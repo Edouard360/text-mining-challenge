@@ -32,11 +32,11 @@ df_dict["train"] = {
 
 testing_on_train = False
 # features = ["commonNeighbours","original","inOutDegree","similarity"]
-features = ["commonNeighbours","tfidf","original","inOutDegree","similarity"]
+features = ["inOutDegree"]
 #features = ["original","inOutDegree","similarity"]
 # By uncommenting you can tune in the parameters
 parameters = {}
-# parameters = {"percentile":95,"metric":"w_degrees"}
+# parameters = {"percentile":95,"metric":"degrees"}
 
 if testing_on_train:
     df_dict["test"] = {

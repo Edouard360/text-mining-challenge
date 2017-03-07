@@ -5,6 +5,7 @@ from preprocessing.inOutFeatures.InOutFeatureExtractor import InOutFeatureExtrac
 from preprocessing.commonNeighboursFeatures.commonNeighboursExtractor import CommonNeighboursFeatureExtractor
 from preprocessing.intersectionFeatures.IntersectionFeatureExtractor import IntersectionFeatureExtractor
 from preprocessing.tfidfFeatures.TfidfFeatureExtractor import TfidfFeatureExtractor
+from preprocessing.tfidfFeatures2.TfidfFeatureExtractor2 import TfidfFeatureExtractor2
 
 class FeatureExporter:
     available_features = {
@@ -43,7 +44,13 @@ class FeatureExporter:
             "path":"tfidfFeatures/",
             "extractor": TfidfFeatureExtractor,
             "default_args": {}
-        }
+        },
+        "tfidf2":{
+        "columns": ["tfidf_similarity_2"],
+        "path": "tfidfFeatures2/",
+        "extractor": TfidfFeatureExtractor2,
+        "default_args": {}
+    }
     }
     def __init__(self, verbose=False):
         self.verbose = verbose
