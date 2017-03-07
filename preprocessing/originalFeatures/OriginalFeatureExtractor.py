@@ -19,8 +19,9 @@ class OriginalFeatureExtractor(FeatureExtractor):
         target_title = target_info["title"].lower().split(" ")
         target_title = remove_stopwords_and_stem(target_title)
 
-        source_auth = source_info["authors"].split(",")
-        target_auth = target_info["authors"].split(",")
+        #Just saying
+        source_auth = source_info["authors"].split(", ")
+        target_auth = target_info["authors"].split(", ")
 
         self.overlap_title.append(len(set(source_title).intersection(set(target_title))))
         self.temp_diff.append(int(source_info['year']) - int(target_info["year"]))
