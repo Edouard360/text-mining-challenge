@@ -30,10 +30,10 @@ df_dict["train"] = {
     "df": random_sample(train_df, p=training_set_percentage)
 }
 
-testing_on_train = True
+testing_on_train = False
 # features = ["commonNeighbours","original","inOutDegree","similarity"]
-# features = ["commonNeighbours","tfidf","original","inOutDegree","similarity"]
-features = ["authors"]
+features = ["commonNeighbours","original","authors","inOutDegree","similarity"]
+#features = ["original"]
 # By uncommenting you can tune in the parameters
 parameters = {}
 # parameters = {"percentile":95,"metric":"degrees"}
@@ -63,8 +63,8 @@ testing_features = FeatureImporter.importFromFile(df_dict["test"]["filename"], f
 
 labels = df_dict["train"]["df"]["label"].values
 
-# classifier = Classifier()
-classifier = LogisticRegression()
+classifier = Classifier()
+#classifier = LogisticRegression()
 classifier.fit(training_features, labels)
 labels_pred = classifier.predict(testing_features)
 

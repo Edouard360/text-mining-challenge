@@ -8,7 +8,7 @@ class AuthorsFeatureExtractor(FeatureExtractor):
         super(AuthorsFeatureExtractor, self).__init__(node_information_df)
         self.id_to_index = dict(zip(self.node_information_df.index.values, range(self.node_information_df.index.size)))
         try:
-            meanAuthorsCitation_df = pd.read_csv("preprocessing/authorsFeatures/meanAuthorsCitation.csv", header=None)
+            meanAuthorsCitation_df = pd.read_csv("preprocessing/authorsFeatures/meanAuthorsCitation.csv")
         except FileNotFoundError:
             print("Building authors graph for the authorFeature")
             dict_authors_edges = build_authors_graph()
@@ -25,8 +25,8 @@ class AuthorsFeatureExtractor(FeatureExtractor):
             print("Computing meanAuthorsCitation list")
             for source, target in list_concat:
                 quotes = []
-                source_authors = authors[id_to_index[source]]
-                target_authors = authors[id_to_index[target]]
+                source_authors = authors[self.id_to_index[source]]
+                target_authors = authors[self.id_to_index[target]]
                 for source_author in source_authors:
                     for target_author in target_authors:
                         if (source_author, target_author) in dict_authors_edges:
@@ -36,7 +36,7 @@ class AuthorsFeatureExtractor(FeatureExtractor):
                 else:
                     meanAuthorsCitation.append(0)
             concatenated_df["meanAuthorsCitation"] = meanAuthorsCitation
-            print("Exporting authorsFeatures to preprocessing/authorsFeatures/meanAuthorsCitation.csv")
+            print("Exporting concatenated authorsFeatures to preprocessing/authorsFeatures/meanAuthorsCitation.csv")
             concatenated_df.to_csv("preprocessing/authorsFeatures/meanAuthorsCitation.csv", index=False)
             meanAuthorsCitation_df = pd.read_csv("preprocessing/authorsFeatures/meanAuthorsCitation.csv")
         self.meanAuthorsCitation_df = meanAuthorsCitation_df.set_index(["source","target"])
