@@ -32,7 +32,7 @@ df_dict["train"] = {
 
 testing_on_train = False
 # features = ["commonNeighbours","original","inOutDegree","similarity"]
-features = ["inOutDegree"]
+features = ["commonNeighbours","tfidf","original","inOutDegree","similarity"]
 #features = ["original","inOutDegree","similarity"]
 # By uncommenting you can tune in the parameters
 parameters = {}
