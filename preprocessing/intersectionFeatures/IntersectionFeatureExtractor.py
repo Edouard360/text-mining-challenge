@@ -2,9 +2,12 @@ from preprocessing.FeatureExtractor import FeatureExtractor
 from tools import remove_stopwords_and_stem
 import numpy as np
 
+
 class IntersectionFeatureExtractor(FeatureExtractor):
-    def __init__(self, node_information_df, verbose = False, freq = 10000, **kargs):
-        super(IntersectionFeatureExtractor, self).__init__(node_information_df,verbose = verbose, freq = freq)
+    columns = ["intersection"]
+
+    def __init__(self, node_information_df, verbose=False, freq=10000, **kargs):
+        super(IntersectionFeatureExtractor, self).__init__(node_information_df, verbose=verbose, freq=freq)
         self.overlap_title_target = []
 
     def extractStep(self, source, target):

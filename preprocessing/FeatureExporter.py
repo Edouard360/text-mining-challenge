@@ -11,43 +11,43 @@ from preprocessing.authorsFeatures.AuthorsFeatureExtractor import AuthorsFeature
 class FeatureExporter:
     available_features = {
         "original": {
-            "columns": ["overlap_title", "temp_diff", "comm_auth"],
+            "columns": OriginalFeatureExtractor.columns,
             "path": "originalFeatures/",
             "extractor": OriginalFeatureExtractor,
             "default_args": {}
         },
         "inOutDegree": {
-            "columns": ["indegree", "outdegree"],  # A changer avec target_indegree for clarity (EDOUARD T NUL)
+            "columns": InOutFeatureExtractor.columns,  # A changer avec target_indegree for clarity (EDOUARD T NUL)
             "path": "inOutFeatures/",
             "extractor": InOutFeatureExtractor,
             "default_args": {}
         },
         "similarity": {
-            "columns": ["similarity"],
+            "columns": SimilarityFeatureExtractor.columns,
             "path": "abstractToGraphFeatures/",
             "extractor": SimilarityFeatureExtractor,
             "default_args": {"metric": "degrees", "percentile": 0.95}
         },
         "intersection": {
-            "columns": ["intersection"],
+            "columns": IntersectionFeatureExtractor.columns,
             "path": "intersectionFeatures/",
             "extractor": IntersectionFeatureExtractor,
             "default_args": {}
         },
         "commonNeighbours": {
-            "columns": ["commonNeighbours"],
+            "columns": CommonNeighboursFeatureExtractor.columns,
             "path": "commonNeighboursFeatures/",
             "extractor": CommonNeighboursFeatureExtractor,
             "default_args": {}
         },
         "tfidf": {
-            "columns": ["tfidf_similarity"],
+            "columns": TfidfFeatureExtractor.columns,
             "path": "tfidfFeatures/",
             "extractor": TfidfFeatureExtractor,
             "default_args": {}
         },
         "authors": {
-            "columns": ["meanAuthorsCitation"],
+            "columns": AuthorsFeatureExtractor.columns,
             "path": "authorsFeatures/",
             "extractor": AuthorsFeatureExtractor,
             "default_args": {}

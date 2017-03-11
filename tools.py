@@ -4,6 +4,7 @@ import igraph
 import csv
 import pandas as pd
 from collections import defaultdict
+from itertools import combinations
 
 stpwds = set(nltk.corpus.stopwords.words("english"))
 stemmer = nltk.stem.PorterStemmer()
@@ -81,6 +82,7 @@ def authors_citation_graph(path=""):
 
     g = igraph.Graph(directed=True)
     g.add_vertices([i for i in range(len(unique_authors))])
+    g.vs["weight"] = np.zeros(len(unique_authors))
     g["authors_to_index"] = dict(zip(unique_authors, range(len(unique_authors))))
 
     id_to_index = dict(zip(node_information_df.index.values, range(node_information_df.index.size)))
@@ -92,12 +94,38 @@ def authors_citation_graph(path=""):
                 for author_target in authors[id_to_index[int(element[1])]]:
                     if (author_source != author_target):
                         edges.append((g["authors_to_index"][author_source], g["authors_to_index"][author_target]))
+                    else:
+                        g.vs[g["authors_to_index"][author_source]]["weight"]+=1
 
     g.add_edges(edges)
     g.es["weight"] = np.ones(len(edges))
     g = g.simplify(combine_edges='sum')
     return g
 
+def authors_collaboration_graph():
+    node_information_df = pd.read_csv("data/node_information.csv", header=None)
+
+    node_information_df.columns = ["ID", "year", "title", "authors", "journalName", "abstract"]
+    node_information_df = node_information_df.reset_index().set_index("ID")
+    node_information_df["authors"].fillna("", inplace=True)
+    authors = node_information_df["authors"].values.tolist()
+    authors = [author_list.split(", ") for author_list in authors]
+    authors = [list(filter(None, author_list)) for author_list in authors]
+    concatenated_authors = np.concatenate(tuple(authors))
+    unique_authors = list(set(concatenated_authors))
+
+    g = igraph.Graph(directed=False)
+    g.add_vertices([i for i in range(len(unique_authors))])
+    g["authors_to_index"] = dict(zip(unique_authors, range(len(unique_authors))))
+    authors_list_ids = [[g["authors_to_index"][author] for author in author_list] for author_list in authors]
+    edges = []
+    for author_list_id in authors_list_ids:
+        edges += list(combinations(author_list_id, 2))
+
+    g.add_edges(edges)
+    g.es["weight"] = np.ones(len(edges))
+    g = g.simplify(combine_edges='sum')
+    return g
 
 def remove_stopwords_and_stem(words):
     words = [token for token in words if (len(token) > 2 and (token not in stpwds))]

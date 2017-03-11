@@ -4,7 +4,8 @@ from classifier import Classifier
 from sklearn import svm
 from tools import random_sample
 from sklearn import metrics
-
+from sklearn.ensemble import RandomForestClassifier
+import numpy as np
 from preprocessing.FeatureExporter import FeatureExporter
 from preprocessing.FeatureImporter import FeatureImporter
 from sklearn.linear_model.logistic import LogisticRegression
@@ -23,16 +24,17 @@ node_information_df = node_information_df.reset_index().set_index("ID")
 node_information_df["authors"].fillna("", inplace=True)
 
 df_dict = dict()
-training_set_percentage = 0.05
+training_set_percentage = 0.3
 
 df_dict["train"] = {
-    "filename": 'training_set.txt',
+    "filename": 'training_set_0.3.txt',
     "df": random_sample(train_df, p=training_set_percentage)
 }
 
-testing_on_train = True
+testing_on_train = False
 # features = ["commonNeighbours","original","inOutDegree","similarity"]
-features = ["authors"]
+features = ["authors","original","inOutDegree","similarity","commonNeighbours"]
+#features = ["authors"]
 verbose = True
 freq = 5000
 
@@ -61,12 +63,20 @@ for key, value in df_dict.items():
                 exporter.exportTo(value["filename"], feature, **parameters)
 
 training_features = FeatureImporter.importFromFile(df_dict["train"]["filename"], features=features, **parameters)
+# training_features_1 = training_features[:,0:2].reshape(-1,2)
+# training_features_2 = training_features[:,3:]
+# training_features = np.concatenate((training_features_1,training_features_2),axis = 1)
+
 testing_features = FeatureImporter.importFromFile(df_dict["test"]["filename"], features=features, **parameters)
+# testing_features_1 = testing_features[:,0:2].reshape(-1,2)
+# testing_features_2 = testing_features[:,3:]
+# testing_features = np.concatenate((testing_features_1,testing_features_2),axis = 1)
 
 labels = df_dict["train"]["df"]["label"].values
 
-# classifier = Classifier()
-classifier = LogisticRegression()
+classifier = Classifier()
+#classifier = LogisticRegression()
+classifier = RandomForestClassifier(n_estimators=100)
 classifier.fit(training_features, labels)
 labels_pred = classifier.predict(testing_features)
 
@@ -77,8 +87,6 @@ if (testing_on_train):
         print("Classifier : ", classifier.name)
     else:
         print("Classifier : ", str(classifier))
-    print("AUC is %f | %.2f  of training set" % (
-    metrics.roc_auc_score(labels_true, labels_pred), training_set_percentage))
     print("f1 score is %f | %.2f  of training set" % (
     metrics.f1_score(labels_true, labels_pred), training_set_percentage))
 else:
