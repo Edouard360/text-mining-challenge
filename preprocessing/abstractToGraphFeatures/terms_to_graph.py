@@ -1,6 +1,7 @@
 import itertools
 import igraph
 
+
 def terms_to_graph(terms, w):
     # This function returns a directed, weighted igraph from a list of terms (the tokens from the pre-processed text) e.g., ['quick','brown','fox']
     # Edges are weighted based on term co-occurence within a sliding window of fixed size 'w'
@@ -27,12 +28,12 @@ def terms_to_graph(terms, w):
         # term to consider
         considered_term = terms[i]
         # all terms within sliding window
-        terms_temp = terms[(i-w+1):(i+1)]
+        terms_temp = terms[(i - w + 1):(i + 1)]
 
         # edges to try
         candidate_edges = []
-        for p in range(w-1):
-            candidate_edges.append((terms_temp[p],considered_term))
+        for p in range(w - 1):
+            candidate_edges.append((terms_temp[p], considered_term))
 
         for try_edge in candidate_edges:
 
@@ -57,26 +58,27 @@ def terms_to_graph(terms, w):
     g.add_edges(from_to.keys())
 
     # set edge and vertice weights
-    g.es['weight'] = list(from_to.values()) # based on co-occurence within sliding window
-    g.vs['weight'] = g.strength(weights=list(from_to.values())) # weighted degree
+    g.es['weight'] = list(from_to.values())  # based on co-occurence within sliding window
+    g.vs['weight'] = g.strength(weights=list(from_to.values()))  # weighted degree
 
-    return(g)
+    return (g)
+
 
 def compute_node_centrality(graph):
     # degree
     degrees = graph.degree()
-    degrees = [round(float(degree)/(len(graph.vs)-1),5) for degree in degrees]
+    degrees = [round(float(degree) / (len(graph.vs) - 1), 5) for degree in degrees]
 
     # weighted degree
     w_degrees = [vertex["weight"] for vertex in graph.vs]
-    w_degrees = [round(value,5) for value in w_degrees]
+    w_degrees = [round(value, 5) for value in w_degrees]
 
     # closeness
     closeness = graph.closeness(normalized=True)
-    closeness = [round(value,5) for value in closeness]
+    closeness = [round(value, 5) for value in closeness]
 
     # weighted closeness
     w_closeness = graph.closeness(normalized=True, weights=graph.es["weight"])
-    w_closeness = [round(value,5) for value in w_closeness]
+    w_closeness = [round(value, 5) for value in w_closeness]
 
-    return(zip(graph.vs["name"],degrees,w_degrees,closeness,w_closeness))
+    return (zip(graph.vs["name"], degrees, w_degrees, closeness, w_closeness))

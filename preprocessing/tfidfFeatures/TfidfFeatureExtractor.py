@@ -6,6 +6,7 @@ from tools import build_graph
 import numpy as np
 import pandas as pd
 
+
 class TfidfFeatureExtractor(FeatureExtractor):
     '''
     We are going to compute cosine_similarity for tfidf representation between :
@@ -13,8 +14,9 @@ class TfidfFeatureExtractor(FeatureExtractor):
     - target
     And take the average as feature (or not ? I am so lost I have no idea what I'm doing)
     '''
-    def __init__(self, node_information_df, verbose = False, freq = 10000, **kargs):
-        super(TfidfFeatureExtractor, self).__init__(node_information_df,verbose = verbose, freq = freq)
+
+    def __init__(self, node_information_df, verbose=False, freq=10000, **kargs):
+        super(TfidfFeatureExtractor, self).__init__(node_information_df, verbose=verbose, freq=freq)
         self.id_to_index = dict(zip(self.node_information_df.index.values, range(self.node_information_df.index.size)))
         try:
             tfidf_similarity_df = pd.read_csv("preprocessing/tfidfFeatures/tfidf_similarity.csv")
@@ -48,11 +50,11 @@ class TfidfFeatureExtractor(FeatureExtractor):
             print("Building graph for the tfidfFeature")
             g = build_graph()
             print("Building tfidf_similarity")
-            train_df = pd.read_csv("data/training_set.txt", sep=" ", header=None, usecols=[0,1])
+            train_df = pd.read_csv("data/training_set.txt", sep=" ", header=None, usecols=[0, 1])
             train_df.columns = ["source", "target"]
             test_df = pd.read_csv("data/testing_set.txt", sep=" ", header=None)
             test_df.columns = ["source", "target"]
-            concatenated_df = pd.concat((train_df,test_df),axis=0)
+            concatenated_df = pd.concat((train_df, test_df), axis=0)
             list_concat = concatenated_df.values.tolist()
             tfidf_similarity = []
             for source, target in list_concat:
@@ -68,7 +70,7 @@ class TfidfFeatureExtractor(FeatureExtractor):
             print("Exporting tfidf_similarity to preprocessing/tfidfFeatures/tfidf_similarity.csv")
             concatenated_df.to_csv("preprocessing/tfidfFeatures/tfidf_similarity.csv", index=False)
             tfidf_similarity_df = pd.read_csv("preprocessing/tfidfFeatures/tfidf_similarity.csv")
-        self.tfidf_similarity_df = tfidf_similarity_df.set_index(["source","target"])
+        self.tfidf_similarity_df = tfidf_similarity_df.set_index(["source", "target"])
         self.tfidf_mean = []
 
     def reset(self):
