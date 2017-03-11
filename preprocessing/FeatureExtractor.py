@@ -1,10 +1,10 @@
-
 class FeatureExtractor:
     """
     An abstract class for the feature extractors.
     Derived classes are in the subfolders
     """
-    def __init__(self, node_information_df, verbose = False, freq = 10000):
+
+    def __init__(self, node_information_df, verbose=False, freq=10000):
         self.counter = 0
         self.freq = freq
         self.verbose = verbose
@@ -20,7 +20,7 @@ class FeatureExtractor:
         self.counter = 0
         return self.concatFeature()
 
-    def extractStep(self,source,target):
+    def extractStep(self, source, target):
         raise NotImplementedError("Please implement extractStep for a subclass")
 
     def reset(self):
