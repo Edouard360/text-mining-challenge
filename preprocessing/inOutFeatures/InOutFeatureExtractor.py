@@ -4,8 +4,8 @@ import pandas as pd
 from tools import build_graph
 
 class InOutFeatureExtractor(FeatureExtractor):
-    def __init__(self,node_information,**kargs):
-        super(InOutFeatureExtractor, self).__init__(node_information)
+    def __init__(self, node_information_df, verbose = False, freq = 10000, **kargs):
+        super(InOutFeatureExtractor, self).__init__(node_information_df,verbose = verbose, freq = freq)
         try:
             node_degree_df = pd.read_csv("preprocessing/inOutFeatures/node_degree.csv", sep=",", header=None)
         except Exception:
@@ -18,10 +18,13 @@ class InOutFeatureExtractor(FeatureExtractor):
         node_degree_df.columns = ["ID", "indegree", "outdegree"]
         node_degree_df = node_degree_df.reset_index().set_index("ID")
         self.node_degree_df = node_degree_df[["indegree", "outdegree"]].values
-        self.overlap_title = []
         self.indegree = []
         self.outdegree = []
         self.id_to_index = dict(zip(self.node_information_df.index.values, range(self.node_information_df.index.size)))
+
+    def reset(self):
+        self.indegree = []
+        self.outdegree = []
 
     def extractStep(self, source, target):
         self.indegree.append(self.node_degree_df[self.id_to_index[target], 0])

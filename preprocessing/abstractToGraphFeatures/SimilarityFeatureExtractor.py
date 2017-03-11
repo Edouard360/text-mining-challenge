@@ -5,8 +5,8 @@ from sklearn.metrics.pairwise import cosine_similarity
 from preprocessing.abstractToGraphFeatures.abstract_to_graph import abstractToGraph
 
 class SimilarityFeatureExtractor(FeatureExtractor):
-    def __init__(self, node_information, **kargs):
-        super(SimilarityFeatureExtractor, self).__init__(node_information)
+    def __init__(self, node_information_df, verbose = False, freq = 10000, **kargs):
+        super(SimilarityFeatureExtractor, self).__init__(node_information_df,verbose = verbose, freq = freq)
         self.similarity = []
         self.id_to_index = dict(zip(self.node_information_df.index.values, range(self.node_information_df.index.size)))
 
@@ -37,6 +37,9 @@ class SimilarityFeatureExtractor(FeatureExtractor):
 
         features_to_keep = (var >= np.percentile(var, percentile))
         self.features = features[:, features_to_keep].toarray()
+
+    def reset(self):
+        self.similarity = []
 
     def extractStep(self, source, target):
         self.similarity.append(cosine_similarity(self.features[self.id_to_index[source], :].reshape(1, -1),

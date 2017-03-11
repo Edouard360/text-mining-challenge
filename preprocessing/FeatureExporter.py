@@ -52,8 +52,12 @@ class FeatureExporter:
         "default_args": {}
     }
     }
-    def __init__(self, verbose=False):
+    def __init__(self, verbose=False,freq=10000):
         self.verbose = verbose
+        self.freq = freq
+        self.extractor = None
+        self.current_feature = None
+        self.current_feature_name = None
 
     @staticmethod
     def pathListBuilder(filename,features = available_features.keys(),**kargs):
@@ -76,9 +80,12 @@ class FeatureExporter:
     def computeFeature(self,df,node_information_df,feature,**kargs):
         keys = FeatureExporter.available_features.keys()
         assert feature in keys,"Choose among those features :"+str(keys)
-        self.current_feature = FeatureExporter.available_features[feature]
-        extractor = self.current_feature["extractor"](node_information_df, **kargs)
-        self.feature = extractor.extractFeature(df,verbose = self.verbose)
+        if not(self.current_feature_name == feature):
+            self.current_feature_name = feature
+            self.current_feature = FeatureExporter.available_features[feature]
+            self.extractor = self.current_feature["extractor"](node_information_df, verbose = self.verbose, freq = self.freq, **kargs)
+        self.feature = self.extractor.extractFeature(df)
+        self.extractor.reset()
 
     def exportTo(self,filename,feature,**kargs):
         self.feature = pd.DataFrame(self.feature)

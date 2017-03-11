@@ -30,10 +30,12 @@ df_dict["train"] = {
     "df": random_sample(train_df, p=training_set_percentage)
 }
 
-testing_on_train = False
+testing_on_train = True
 # features = ["commonNeighbours","original","inOutDegree","similarity"]
-features = ["commonNeighbours","original","authors","inOutDegree","similarity"]
-#features = ["original"]
+features = ["authors"]
+verbose = True
+freq = 5000
+
 # By uncommenting you can tune in the parameters
 parameters = {}
 # parameters = {"percentile":95,"metric":"degrees"}
@@ -49,10 +51,10 @@ else:
         "df": test_df
     }
 
+exporter = FeatureExporter(verbose=verbose, freq=freq)
 for key,value in df_dict.items():
     if not FeatureImporter.check(value["filename"],features=features,**parameters):
         for feature in features:
-            exporter = FeatureExporter(True)
             if not FeatureImporter.check(value["filename"],features=[feature],**parameters):
                 print("Exporting for " + key + " the feature " + feature)
                 exporter.computeFeature(value["df"],node_information_df,feature,**parameters)
@@ -63,8 +65,8 @@ testing_features = FeatureImporter.importFromFile(df_dict["test"]["filename"], f
 
 labels = df_dict["train"]["df"]["label"].values
 
-classifier = Classifier()
-#classifier = LogisticRegression()
+#classifier = Classifier()
+classifier = LogisticRegression()
 classifier.fit(training_features, labels)
 labels_pred = classifier.predict(testing_features)
 

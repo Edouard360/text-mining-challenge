@@ -5,8 +5,8 @@ from tools import build_graph
 import igraph
 
 class CommonNeighboursFeatureExtractor(FeatureExtractor):
-    def __init__(self, node_information, **kargs):
-        super(CommonNeighboursFeatureExtractor, self).__init__(node_information)
+    def __init__(self, node_information_df, verbose = False, freq = 10000, **kargs):
+        super(CommonNeighboursFeatureExtractor, self).__init__(node_information_df,verbose = verbose, freq = freq)
         self.id_to_index = dict(zip(self.node_information_df.index.values, range(self.node_information_df.index.size)))
         try:
             common_neighbours_df = pd.read_csv("preprocessing/commonNeighboursFeatures/common_neighbours.csv")
@@ -29,6 +29,9 @@ class CommonNeighboursFeatureExtractor(FeatureExtractor):
             print("Exporting graph to preprocessing/commonNeighboursFeatures/common_neighbours.csv")
             common_neighbours_df = pd.read_csv("preprocessing/commonNeighboursFeatures/common_neighbours.csv")
         self.common_neighbours_df = common_neighbours_df.set_index(["source","target"])
+        self.commonNeighbours = []
+
+    def reset(self):
         self.commonNeighbours = []
 
     def extractStep(self, source, target):
