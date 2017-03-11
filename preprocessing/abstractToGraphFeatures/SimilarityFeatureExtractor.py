@@ -4,9 +4,10 @@ from scipy import sparse
 from sklearn.metrics.pairwise import cosine_similarity
 from preprocessing.abstractToGraphFeatures.abstract_to_graph import abstractToGraph
 
+
 class SimilarityFeatureExtractor(FeatureExtractor):
-    def __init__(self, node_information_df, verbose = False, freq = 10000, **kargs):
-        super(SimilarityFeatureExtractor, self).__init__(node_information_df,verbose = verbose, freq = freq)
+    def __init__(self, node_information_df, verbose=False, freq=10000, **kargs):
+        super(SimilarityFeatureExtractor, self).__init__(node_information_df, verbose=verbose, freq=freq)
         self.similarity = []
         self.id_to_index = dict(zip(self.node_information_df.index.values, range(self.node_information_df.index.size)))
 
@@ -22,7 +23,8 @@ class SimilarityFeatureExtractor(FeatureExtractor):
         else:
             percentile = kargs["percentile"]
 
-        assert metric in ["closeness","degrees","w_closeness","w_degrees","tfidf"] ,"You should select an available metric"
+        assert metric in ["closeness", "degrees", "w_closeness", "w_degrees",
+                          "tfidf"], "You should select an available metric"
         try:
             loader = np.load("preprocessing/abstractToGraphFeatures/metrics/" + metric + ".npz")
         except Exception:
@@ -43,7 +45,7 @@ class SimilarityFeatureExtractor(FeatureExtractor):
 
     def extractStep(self, source, target):
         self.similarity.append(cosine_similarity(self.features[self.id_to_index[source], :].reshape(1, -1),
-                                            self.features[self.id_to_index[target], :].reshape(1, -1))[0, 0])
+                                                 self.features[self.id_to_index[target], :].reshape(1, -1))[0, 0])
 
     def concatFeature(self):
         return np.array([self.similarity]).T

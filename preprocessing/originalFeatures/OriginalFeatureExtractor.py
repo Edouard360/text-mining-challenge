@@ -2,9 +2,10 @@ from preprocessing.FeatureExtractor import FeatureExtractor
 from tools import remove_stopwords_and_stem
 import numpy as np
 
+
 class OriginalFeatureExtractor(FeatureExtractor):
-    def __init__(self, node_information_df, verbose = False, freq = 10000, **kargs):
-        super(OriginalFeatureExtractor, self).__init__(node_information_df,verbose = verbose, freq = freq)
+    def __init__(self, node_information_df, verbose=False, freq=10000, **kargs):
+        super(OriginalFeatureExtractor, self).__init__(node_information_df, verbose=verbose, freq=freq)
         self.overlap_title = []
         self.temp_diff = []
         self.comm_auth = []
@@ -19,7 +20,7 @@ class OriginalFeatureExtractor(FeatureExtractor):
         target_title = target_info["title"].lower().split(" ")
         target_title = remove_stopwords_and_stem(target_title)
 
-        #Just saying
+        # Just saying
         source_auth = source_info["authors"].split(", ")
         target_auth = target_info["authors"].split(", ")
 
@@ -34,4 +35,3 @@ class OriginalFeatureExtractor(FeatureExtractor):
 
     def concatFeature(self):
         return np.array([self.overlap_title, self.temp_diff, self.comm_auth]).T
-

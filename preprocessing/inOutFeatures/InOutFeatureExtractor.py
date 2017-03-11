@@ -3,9 +3,10 @@ import numpy as np
 import pandas as pd
 from tools import build_graph
 
+
 class InOutFeatureExtractor(FeatureExtractor):
-    def __init__(self, node_information_df, verbose = False, freq = 10000, **kargs):
-        super(InOutFeatureExtractor, self).__init__(node_information_df,verbose = verbose, freq = freq)
+    def __init__(self, node_information_df, verbose=False, freq=10000, **kargs):
+        super(InOutFeatureExtractor, self).__init__(node_information_df, verbose=verbose, freq=freq)
         try:
             node_degree_df = pd.read_csv("preprocessing/inOutFeatures/node_degree.csv", sep=",", header=None)
         except Exception:
@@ -32,4 +33,3 @@ class InOutFeatureExtractor(FeatureExtractor):
 
     def concatFeature(self):
         return np.array([self.indegree, self.outdegree]).T
-

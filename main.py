@@ -70,7 +70,7 @@ classifier = LogisticRegression()
 classifier.fit(training_features, labels)
 labels_pred = classifier.predict(testing_features)
 
-if (testing_on_train):
+if testing_on_train:
     labels_true = df_dict["test"]["df"]["label"].values
     print("Features : ", features)
     if hasattr(classifier, 'name'):
@@ -78,9 +78,9 @@ if (testing_on_train):
     else:
         print("Classifier : ", str(classifier))
     print("AUC is %f | %.2f  of training set" % (
-    metrics.roc_auc_score(labels_true, labels_pred), training_set_percentage))
+        metrics.roc_auc_score(labels_true, labels_pred), training_set_percentage))
     print("f1 score is %f | %.2f  of training set" % (
-    metrics.f1_score(labels_true, labels_pred), training_set_percentage))
+        metrics.f1_score(labels_true, labels_pred), training_set_percentage))
 else:
     prediction_df = pd.DataFrame(columns=["id", "category"], dtype=int)
     prediction_df["id"] = range(len(labels_pred))
