@@ -72,7 +72,7 @@ classifier = Classifier()
 if testing_on_train:
     labels_true = df_dict["test"]["df"]["label"].values
     if not early_stopping:
-        classifier.fit_perso(training_features, labels)
+        classifier.fit(training_features, labels)
         labels_pred = classifier.predict(testing_features)
         print("Features : ", features)
         if hasattr(classifier, 'name'):
@@ -92,7 +92,7 @@ if testing_on_train:
         else:
             classifier.early_stop(eval_set)
 else:
-    classifier.fit_perso(training_features, labels)
+    classifier.fit(training_features, labels)
     labels_pred = classifier.predict(testing_features)
     prediction_df = pd.DataFrame(columns=["id", "category"], dtype=int)
     prediction_df["id"] = range(len(labels_pred))
