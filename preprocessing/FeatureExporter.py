@@ -7,52 +7,54 @@ from preprocessing.intersectionFeatures.IntersectionFeatureExtractor import Inte
 from preprocessing.tfidfFeatures.TfidfFeatureExtractor import TfidfFeatureExtractor
 from preprocessing.authorsFeatures.AuthorsFeatureExtractor import AuthorsFeatureExtractor
 
+
 class FeatureExporter:
     available_features = {
-        "original":{
-            "columns":["overlap_title", "temp_diff", "comm_auth"],
-            "path":"originalFeatures/",
-            "extractor":OriginalFeatureExtractor,
-            "default_args":{}
+        "original": {
+            "columns": ["overlap_title", "temp_diff", "comm_auth"],
+            "path": "originalFeatures/",
+            "extractor": OriginalFeatureExtractor,
+            "default_args": {}
         },
-        "inOutDegree":{
-            "columns":["indegree","outdegree"],# A changer avec target_indegree for clarity (EDOUARD T NUL)
-            "path":"inOutFeatures/",
+        "inOutDegree": {
+            "columns": ["indegree", "outdegree"],  # A changer avec target_indegree for clarity (EDOUARD T NUL)
+            "path": "inOutFeatures/",
             "extractor": InOutFeatureExtractor,
-            "default_args":{}
+            "default_args": {}
         },
-        "similarity":{
-            "columns":["similarity"],
-            "path":"abstractToGraphFeatures/",
+        "similarity": {
+            "columns": ["similarity"],
+            "path": "abstractToGraphFeatures/",
             "extractor": SimilarityFeatureExtractor,
-            "default_args": {"metric":"degrees", "percentile" : 0.95}
+            "default_args": {"metric": "degrees", "percentile": 0.95}
         },
-        "intersection":{
-            "columns":["intersection"],
-            "path":"intersectionFeatures/",
+        "intersection": {
+            "columns": ["intersection"],
+            "path": "intersectionFeatures/",
             "extractor": IntersectionFeatureExtractor,
             "default_args": {}
         },
-        "commonNeighbours":{
-            "columns":["commonNeighbours"],
-            "path":"commonNeighboursFeatures/",
+        "commonNeighbours": {
+            "columns": ["commonNeighbours"],
+            "path": "commonNeighboursFeatures/",
             "extractor": CommonNeighboursFeatureExtractor,
             "default_args": {}
         },
-        "tfidf":{
-            "columns":["tfidf_similarity"],
-            "path":"tfidfFeatures/",
+        "tfidf": {
+            "columns": ["tfidf_similarity"],
+            "path": "tfidfFeatures/",
             "extractor": TfidfFeatureExtractor,
             "default_args": {}
         },
-        "authors":{
-        "columns": ["meanAuthorsCitation"],
-        "path": "authorsFeatures/",
-        "extractor": AuthorsFeatureExtractor,
-        "default_args": {}
+        "authors": {
+            "columns": ["meanAuthorsCitation"],
+            "path": "authorsFeatures/",
+            "extractor": AuthorsFeatureExtractor,
+            "default_args": {}
+        }
     }
-    }
-    def __init__(self, verbose=False,freq=10000):
+
+    def __init__(self, verbose=False, freq=10000):
         self.verbose = verbose
         self.freq = freq
         self.extractor = None
@@ -60,34 +62,35 @@ class FeatureExporter:
         self.current_feature_name = None
 
     @staticmethod
-    def pathListBuilder(filename,features = available_features.keys(),**kargs):
+    def pathListBuilder(filename, features=available_features.keys(), **kargs):
         path_list = []
         for key, value in FeatureExporter.available_features.items():
             if key in features:
                 keys_to_keep = list(set(value["default_args"].keys()) & set(kargs.keys()))
                 keys_to_keep.sort()
-                suffix = "".join([key_str + "_" + str(kargs[key_str]) +"_" for key_str in keys_to_keep])
+                suffix = "".join([key_str + "_" + str(kargs[key_str]) + "_" for key_str in keys_to_keep])
                 path_list.append("preprocessing/" + value["path"] + "output/" + suffix + filename)
         assert len(path_list) > 0, "You should select existing features among \n:" + str(
             FeatureExporter.available_features.keys())
         return path_list
 
-    def exportAllTo(self,df,node_information_df,filename):
-        for key,value in FeatureExporter.available_features.items():
-            self.computeFeature(df, node_information_df, key,**(value["default_args"]))
+    def exportAllTo(self, df, node_information_df, filename):
+        for key, value in FeatureExporter.available_features.items():
+            self.computeFeature(df, node_information_df, key, **(value["default_args"]))
             self.exportTo(filename)
 
-    def computeFeature(self,df,node_information_df,feature,**kargs):
+    def computeFeature(self, df, node_information_df, feature, **kargs):
         keys = FeatureExporter.available_features.keys()
-        assert feature in keys,"Choose among those features :"+str(keys)
-        if not(self.current_feature_name == feature):
+        assert feature in keys, "Choose among those features :" + str(keys)
+        if not (self.current_feature_name == feature):
             self.current_feature_name = feature
             self.current_feature = FeatureExporter.available_features[feature]
-            self.extractor = self.current_feature["extractor"](node_information_df, verbose = self.verbose, freq = self.freq, **kargs)
+            self.extractor = self.current_feature["extractor"](node_information_df, verbose=self.verbose,
+                                                               freq=self.freq, **kargs)
         self.feature = self.extractor.extractFeature(df)
         self.extractor.reset()
 
-    def exportTo(self,filename,feature,**kargs):
+    def exportTo(self, filename, feature, **kargs):
         self.feature = pd.DataFrame(self.feature)
         self.feature.columns = self.current_feature["columns"]
-        self.feature.to_csv(FeatureExporter.pathListBuilder(filename,feature,**kargs)[0])
+        self.feature.to_csv(FeatureExporter.pathListBuilder(filename, feature, **kargs)[0])
