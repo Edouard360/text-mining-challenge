@@ -4,6 +4,7 @@ import igraph
 import csv
 import pandas as pd
 from collections import defaultdict
+from sklearn.metrics import f1_score
 
 stpwds = set(nltk.corpus.stopwords.words("english"))
 stemmer = nltk.stem.PorterStemmer()
@@ -124,3 +125,14 @@ def stats_df(df):
     print("The most cited document, is cited : ", df.groupby(["to"]).sum()["y"].max(), " times.")
     print("Nb of documents never cited  : ", sum(df.groupby(["to"]).sum()["y"] == 0), "\n")
     print("There are NaN to handle for authors and journalName :")
+
+
+def xgb_f1(y, t):
+    '''
+    :param y: true labels
+    :param t: predicted labels
+    :return: f1 score
+    '''
+    # t = t.get_label()
+    y_bin = [1. if y_cont > 0.5 else 0. for y_cont in y]  # binaryzing your output
+    return 'f1', f1_score(t, y_bin)

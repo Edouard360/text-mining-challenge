@@ -1,7 +1,6 @@
 from time import localtime, strftime
 import pandas as pd
 from classifier import Classifier
-from sklearn import svm
 from tools import random_sample
 from sklearn import metrics
 
@@ -30,9 +29,9 @@ df_dict["train"] = {
     "df": random_sample(train_df, p=training_set_percentage)
 }
 
-
-testing_on_train = False
-features = ["commonNeighbours", "original", "inOutDegree", "similarity", "authors"]
+testing_on_train = True
+early_stopping = True
+features = ["commonNeighbours", 'original', "inOutDegree", "similarity", "authors"]
 # features = ["authors"]
 verbose = True
 freq = 5000
@@ -40,6 +39,7 @@ freq = 5000
 # By uncommenting you can tune in the parameters
 parameters = {}
 # parameters = {"percentile":95,"metric":"degrees"}
+
 
 if testing_on_train:
     df_dict["test"] = {
@@ -66,23 +66,34 @@ testing_features = FeatureImporter.importFromFile(df_dict["test"]["filename"], f
 
 labels = df_dict["train"]["df"]["label"].values
 
-# classifier = Classifier()
-classifier = LogisticRegression()
-classifier.fit(training_features, labels)
-labels_pred = classifier.predict(testing_features)
+classifier = Classifier()
+# classifier = LogisticRegression()
 
 if testing_on_train:
     labels_true = df_dict["test"]["df"]["label"].values
-    print("Features : ", features)
-    if hasattr(classifier, 'name'):
-        print("Classifier : ", classifier.name)
+    if not early_stopping:
+        classifier.fit_perso(training_features, labels)
+        labels_pred = classifier.predict(testing_features)
+        print("Features : ", features)
+        if hasattr(classifier, 'name'):
+            print("Classifier : ", classifier.name)
+        else:
+            print("Classifier : ", str(classifier))
+        print("AUC is %f | %.2f  of training set" % (
+            metrics.roc_auc_score(labels_true, labels_pred), training_set_percentage))
+        print("f1 score is %f | %.2f  of training set" % (
+            metrics.f1_score(labels_true, labels_pred), training_set_percentage))
     else:
-        print("Classifier : ", str(classifier))
-    print("AUC is %f | %.2f  of training set" % (
-        metrics.roc_auc_score(labels_true, labels_pred), training_set_percentage))
-    print("f1 score is %f | %.2f  of training set" % (
-        metrics.f1_score(labels_true, labels_pred), training_set_percentage))
+        plot_curves = False
+        eval_set = [(training_features, labels),
+                    (testing_features, labels_true)]
+        if plot_curves:
+            classifier.plotlearningcurves(eval_set)
+        else:
+            classifier.early_stop(eval_set)
 else:
+    classifier.fit_perso(training_features, labels)
+    labels_pred = classifier.predict(testing_features)
     prediction_df = pd.DataFrame(columns=["id", "category"], dtype=int)
     prediction_df["id"] = range(len(labels_pred))
     prediction_df["category"] = labels_pred
