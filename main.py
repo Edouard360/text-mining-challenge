@@ -1,4 +1,4 @@
-from time import gmtime, strftime
+from time import localtime, strftime
 import pandas as pd
 from classifier import Classifier
 from sklearn import svm
@@ -9,7 +9,7 @@ from preprocessing.FeatureExporter import FeatureExporter
 from preprocessing.FeatureImporter import FeatureImporter
 from sklearn.linear_model.logistic import LogisticRegression
 
-time_sub = strftime("%Y-%m-%d %H:%M:%S", gmtime()).replace(' ', '__')
+time_sub = strftime("%Y-%m-%d %H:%M:%S", localtime()).replace(' ', '__')
 
 train_df = pd.read_csv("data/training_set.txt", sep=" ", header=None)
 train_df.columns = ["source", "target", "label"]
@@ -30,9 +30,10 @@ df_dict["train"] = {
     "df": random_sample(train_df, p=training_set_percentage)
 }
 
-testing_on_train = True
-# features = ["commonNeighbours","original","inOutDegree","similarity"]
-features = ["authors"]
+
+testing_on_train = False
+features = ["commonNeighbours", "original", "inOutDegree", "similarity", "authors"]
+# features = ["authors"]
 verbose = True
 freq = 5000
 
