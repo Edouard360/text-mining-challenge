@@ -67,7 +67,7 @@ class Classifier(BaseEstimator):
                      early_stopping_rounds=10, eval_metric="logloss",
                      eval_set=eval_set, verbose=True)
 
-    def fit_perso(self, X, y):
+    def fit(self, X, y):
         self.clf.fit(X, y)
 
     def predict(self, X):
