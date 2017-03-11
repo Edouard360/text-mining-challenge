@@ -3,8 +3,8 @@ from tools import remove_stopwords_and_stem
 import numpy as np
 
 class OriginalFeatureExtractor(FeatureExtractor):
-    def __init__(self,node_information_df,**kargs):
-        super(OriginalFeatureExtractor, self).__init__(node_information_df)
+    def __init__(self, node_information_df, verbose = False, freq = 10000, **kargs):
+        super(OriginalFeatureExtractor, self).__init__(node_information_df,verbose = verbose, freq = freq)
         self.overlap_title = []
         self.temp_diff = []
         self.comm_auth = []
@@ -26,6 +26,11 @@ class OriginalFeatureExtractor(FeatureExtractor):
         self.overlap_title.append(len(set(source_title).intersection(set(target_title))))
         self.temp_diff.append(int(source_info['year']) - int(target_info["year"]))
         self.comm_auth.append(len(set(source_auth).intersection(set(target_auth))))
+
+    def reset(self):
+        self.overlap_title = []
+        self.temp_diff = []
+        self.comm_auth = []
 
     def concatFeature(self):
         return np.array([self.overlap_title, self.temp_diff, self.comm_auth]).T

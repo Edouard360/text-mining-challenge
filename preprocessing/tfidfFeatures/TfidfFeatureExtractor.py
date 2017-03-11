@@ -13,8 +13,8 @@ class TfidfFeatureExtractor(FeatureExtractor):
     - target
     And take the average as feature (or not ? I am so lost I have no idea what I'm doing)
     '''
-    def __init__(self, node_information_df, **kargs):
-        super(TfidfFeatureExtractor, self).__init__(node_information_df)
+    def __init__(self, node_information_df, verbose = False, freq = 10000, **kargs):
+        super(TfidfFeatureExtractor, self).__init__(node_information_df,verbose = verbose, freq = freq)
         self.id_to_index = dict(zip(self.node_information_df.index.values, range(self.node_information_df.index.size)))
         try:
             tfidf_similarity_df = pd.read_csv("preprocessing/tfidfFeatures/tfidf_similarity.csv")
@@ -71,7 +71,11 @@ class TfidfFeatureExtractor(FeatureExtractor):
         self.tfidf_similarity_df = tfidf_similarity_df.set_index(["source","target"])
         self.tfidf_mean = []
 
+    def reset(self):
+        self.tfidf_mean = []
+
     def extractStep(self, source, target):
         self.tfidf_mean.append(self.tfidf_similarity_df.loc[(source, target)].values[0])
+
     def concatFeature(self):
         return np.array([self.tfidf_mean]).T

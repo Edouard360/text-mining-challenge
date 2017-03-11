@@ -3,8 +3,8 @@ from tools import remove_stopwords_and_stem
 import numpy as np
 
 class IntersectionFeatureExtractor(FeatureExtractor):
-    def __init__(self, node_information_df, **kargs):
-        super(IntersectionFeatureExtractor, self).__init__(node_information_df)
+    def __init__(self, node_information_df, verbose = False, freq = 10000, **kargs):
+        super(IntersectionFeatureExtractor, self).__init__(node_information_df,verbose = verbose, freq = freq)
         self.overlap_title_target = []
 
     def extractStep(self, source, target):
@@ -18,6 +18,9 @@ class IntersectionFeatureExtractor(FeatureExtractor):
         target_abstract = remove_stopwords_and_stem(target_abstract)
 
         self.overlap_title_target.append(len(set(source_title).intersection(set(target_abstract))))
+
+    def reset(self):
+        self.overlap_title_target = []
 
     def concatFeature(self):
         return np.array([self.overlap_title_target]).T
