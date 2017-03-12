@@ -1,7 +1,6 @@
-from time import gmtime, strftime
+from time import localtime, strftime
 import pandas as pd
 from classifier import Classifier
-from sklearn import svm
 from tools import random_sample
 from sklearn import metrics
 from sklearn.ensemble import RandomForestClassifier
@@ -10,7 +9,7 @@ from preprocessing.FeatureExporter import FeatureExporter
 from preprocessing.FeatureImporter import FeatureImporter
 from sklearn.linear_model.logistic import LogisticRegression
 
-time_sub = strftime("%Y-%m-%d %H:%M:%S", gmtime()).replace(' ', '__')
+time_sub = strftime("%Y-%m-%d %H:%M:%S", localtime()).replace(' ', '__')
 
 train_df = pd.read_csv("data/training_set.txt", sep=" ", header=None)
 train_df.columns = ["source", "target", "label"]
@@ -24,17 +23,17 @@ node_information_df = node_information_df.reset_index().set_index("ID")
 node_information_df["authors"].fillna("", inplace=True)
 
 df_dict = dict()
-training_set_percentage = 0.3
+training_set_percentage = 0.05
 
 df_dict["train"] = {
-    "filename": 'training_set_0.3.txt',
+    "filename": 'training_set.txt',
     "df": random_sample(train_df, p=training_set_percentage)
 }
 
-testing_on_train = False
-# features = ["commonNeighbours","original","inOutDegree","similarity"]
-features = ["authors","original","inOutDegree","similarity","commonNeighbours"]
-#features = ["authors"]
+testing_on_train = True
+early_stopping = True
+features = ["authors", "commonNeighbours", 'original', "inOutDegree", "similarity", "authors"]
+# features = ["authors"]
 verbose = True
 freq = 5000
 
@@ -75,6 +74,30 @@ testing_features = FeatureImporter.importFromFile(df_dict["test"]["filename"], f
 labels = df_dict["train"]["df"]["label"].values
 
 classifier = Classifier()
+# classifier = LogisticRegression()
+# classifier = RandomForestClassifier(n_estimators=100)
+
+if testing_on_train:
+    labels_true = df_dict["test"]["df"]["label"].values
+    if not early_stopping:
+        classifier.fit(training_features, labels)
+        labels_pred = classifier.predict(testing_features)
+        print("Features : ", features)
+        if hasattr(classifier, 'name'):
+            print("Classifier : ", classifier.name)
+        else:
+            print("Classifier : ", str(classifier))
+        print("f1 score is %f | %.2f  of training set" % (
+            metrics.f1_score(labels_true, labels_pred), training_set_percentage))
+    else:
+        plot_curves = False
+        eval_set = [(training_features, labels),
+                    (testing_features, labels_true)]
+        if plot_curves:
+            classifier.plotlearningcurves(eval_set)
+        else:
+            classifier.early_stop(eval_set)
+classifier = Classifier()
 #classifier = LogisticRegression()
 classifier = RandomForestClassifier(n_estimators=100)
 classifier.fit(training_features, labels)
@@ -90,6 +113,8 @@ if (testing_on_train):
     print("f1 score is %f | %.2f  of training set" % (
     metrics.f1_score(labels_true, labels_pred), training_set_percentage))
 else:
+    classifier.fit(training_features, labels)
+    labels_pred = classifier.predict(testing_features)
     prediction_df = pd.DataFrame(columns=["id", "category"], dtype=int)
     prediction_df["id"] = range(len(labels_pred))
     prediction_df["category"] = labels_pred
