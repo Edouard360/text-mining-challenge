@@ -33,10 +33,10 @@ df_dict["train"] = {
 
 testing_on_train = True
 early_stopping = False
-# features = ["authors", "commonNeighbours", 'original', "inOutDegree", "similarity", "authors"]
-features = ["original"]
+features = ["authors", "commonNeighbours", 'original', "inOutDegree", "similarity"]
+features += ["pageRank"]
 verbose = True
-freq = 5000
+freq = 10000
 
 # By uncommenting you can tune in the parameters
 parameters = {}
