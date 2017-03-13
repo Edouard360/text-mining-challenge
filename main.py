@@ -21,6 +21,7 @@ node_information_df = pd.read_csv("data/node_information.csv", sep=",", header=N
 node_information_df.columns = ["ID", "year", "title", "authors", "journalName", "abstract"]
 node_information_df = node_information_df.reset_index().set_index("ID")
 node_information_df["authors"].fillna("", inplace=True)
+node_information_df["journalName"].fillna("", inplace=True)
 
 df_dict = dict()
 training_set_percentage = 0.05
@@ -31,9 +32,9 @@ df_dict["train"] = {
 }
 
 testing_on_train = True
-early_stopping = True
-features = ["authors", "commonNeighbours", 'original', "inOutDegree", "similarity", "authors"]
-# features = ["authors"]
+early_stopping = False
+# features = ["authors", "commonNeighbours", 'original', "inOutDegree", "similarity", "authors"]
+features = ["original"]
 verbose = True
 freq = 5000
 
@@ -97,21 +98,6 @@ if testing_on_train:
             classifier.plotlearningcurves(eval_set)
         else:
             classifier.early_stop(eval_set)
-classifier = Classifier()
-#classifier = LogisticRegression()
-classifier = RandomForestClassifier(n_estimators=100)
-classifier.fit(training_features, labels)
-labels_pred = classifier.predict(testing_features)
-
-if (testing_on_train):
-    labels_true = df_dict["test"]["df"]["label"].values
-    print("Features : ", features)
-    if hasattr(classifier, 'name'):
-        print("Classifier : ", classifier.name)
-    else:
-        print("Classifier : ", str(classifier))
-    print("f1 score is %f | %.2f  of training set" % (
-    metrics.f1_score(labels_true, labels_pred), training_set_percentage))
 else:
     classifier.fit(training_features, labels)
     labels_pred = classifier.predict(testing_features)
