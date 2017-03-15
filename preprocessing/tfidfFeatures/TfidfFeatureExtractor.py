@@ -2,10 +2,10 @@ from preprocessing.FeatureExtractor import FeatureExtractor
 from tools import remove_stopwords_and_stem
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.feature_extraction.text import TfidfVectorizer
-from tools import build_graph
+from tools import articles_graph
 import numpy as np
 import pandas as pd
-
+import csv
 
 class TfidfFeatureExtractor(FeatureExtractor):
     columns = ["tfidf_similarity"]
@@ -49,7 +49,7 @@ class TfidfFeatureExtractor(FeatureExtractor):
                 print("Doc­doc similarity matrix has been computed and saved, booyah !")
                 np.save("preprocessing/tfidfFeatures/ddsim_matrix.npy", ddsim_matrix)
             print("Building graph for the tfidfFeature")
-            g = build_graph()
+            g = articles_graph()
             print("Building tfidf_similarity")
             train_df = pd.read_csv("data/training_set.txt", sep=" ", header=None, usecols=[0, 1])
             train_df.columns = ["source", "target"]

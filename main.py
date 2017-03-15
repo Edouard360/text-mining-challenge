@@ -32,6 +32,7 @@ df_dict["train"] = {
 }
 
 testing_on_train = True
+compare = False
 early_stopping = False
 features = ["authors", "commonNeighbours", 'original', "inOutDegree", "similarity"]
 features += ["pageRank"]
@@ -43,10 +44,20 @@ parameters = {}
 # parameters = {"percentile":95,"metric":"degrees"}
 
 if testing_on_train:
-    df_dict["test"] = {
-        "filename": 'testing_training_set.txt',
-        "df": random_sample(train_df, p=0.05, seed=43)
-    }
+    if not compare:
+        df_dict["test"] = {
+            "filename": 'testing_training_set.txt',
+            "df": random_sample(train_df, p=0.05, seed=43)
+        }
+    else:
+        s_test = pd.read_csv("submissions/final_submission.csv", sep=",")
+        s_test = pd.concat((test_df, s_test), axis=1)
+        del s_test["id"]
+        s_test.columns = ["source", "target", "label"]
+        df_dict["test"] = {
+            "filename": 'testing_set.txt',
+            "df": s_test
+        }
 else:
     df_dict["test"] = {
         "filename": 'testing_set.txt',
@@ -63,11 +74,13 @@ for key, value in df_dict.items():
                 exporter.exportTo(value["filename"], feature, **parameters)
 
 training_features = FeatureImporter.importFromFile(df_dict["train"]["filename"], features=features, **parameters)
+# training_features = training_features[:,5].reshape(-1,1)
 # training_features_1 = training_features[:,0:2].reshape(-1,2)
 # training_features_2 = training_features[:,3:]
 # training_features = np.concatenate((training_features_1,training_features_2),axis = 1)
 
 testing_features = FeatureImporter.importFromFile(df_dict["test"]["filename"], features=features, **parameters)
+# testing_features = testing_features[:,5].reshape(-1,1)
 # testing_features_1 = testing_features[:,0:2].reshape(-1,2)
 # testing_features_2 = testing_features[:,3:]
 # testing_features = np.concatenate((testing_features_1,testing_features_2),axis = 1)
@@ -76,7 +89,7 @@ labels = df_dict["train"]["df"]["label"].values
 
 classifier = Classifier()
 # classifier = LogisticRegression()
-# classifier = RandomForestClassifier(n_estimators=100)
+classifier = RandomForestClassifier(n_estimators=100)
 
 if testing_on_train:
     labels_true = df_dict["test"]["df"]["label"].values

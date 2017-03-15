@@ -1,7 +1,7 @@
 from preprocessing.FeatureExtractor import FeatureExtractor
 import numpy as np
 import pandas as pd
-from tools import build_graph
+from tools import articles_graph
 
 
 class InOutFeatureExtractor(FeatureExtractor):
@@ -13,7 +13,7 @@ class InOutFeatureExtractor(FeatureExtractor):
             node_degree_df = pd.read_csv("preprocessing/inOutFeatures/node_degree.csv", sep=",", header=None)
         except Exception:
             print("Building graph for the inOutFeature")
-            g = build_graph()
+            g = articles_graph()
             node_degree = pd.DataFrame(index=g.vs["name"], data={"indegree": g.indegree(), "outdegree": g.outdegree()})
             node_degree.to_csv("preprocessing/inOutFeatures/node_degree.csv", header=0)
             print("Exporting graph to preprocessing/inOutFeatures/node_degree.csv")
