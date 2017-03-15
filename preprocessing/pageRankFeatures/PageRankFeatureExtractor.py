@@ -1,7 +1,7 @@
 from preprocessing.FeatureExtractor import FeatureExtractor
 import numpy as np
 import pandas as pd
-from tools import build_graph
+from tools import articles_graph
 
 
 class PageRankFeatureExtractor(FeatureExtractor):
@@ -13,7 +13,7 @@ class PageRankFeatureExtractor(FeatureExtractor):
             page_rank_df = pd.read_csv("preprocessing/pageRankFeatures/page_rank.csv", sep=",")
         except Exception:
             print("Building graph for the pageRankFeature")
-            g = build_graph()
+            g = articles_graph()
             page_rank_df = pd.DataFrame(index=g.vs["name"], data={"pageRank": g.pagerank(directed=True)})
             page_rank_df.to_csv("preprocessing/pageRankFeatures/page_rank.csv")
             print("Exporting graph to preprocessing/pageRankFeatures/page_rank.csv")

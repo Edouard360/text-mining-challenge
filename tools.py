@@ -11,6 +11,25 @@ stpwds = set(nltk.corpus.stopwords.words("english"))
 stemmer = nltk.stem.PorterStemmer()
 
 
+def articles_graph(path=""):
+    with open(path + "data/training_set.txt", "r") as f:
+        reader = csv.reader(f)
+        training_set = list(reader)
+    training_set = [element[0].split(" ") for element in training_set]
+    node_id_df = pd.read_csv("data/node_information.csv", header=None, usecols=[0]).values.reshape(-1)
+
+    g = igraph.Graph(directed=True)
+
+    g["articles_to_index"] = dict(zip(node_id_df, range(len(node_id_df))))
+    g.add_vertices([i for i in range(len(node_id_df))])
+    edges = []
+    for element in training_set:
+        if element[2] == "1":
+            edges.append((g["articles_to_index"][int(element[0])], g["articles_to_index"][int(element[1])]))
+    g.add_edges(edges)
+    return g
+
+
 def build_graph(path=""):
     with open(path + "data/training_set.txt", "r") as f:
         reader = csv.reader(f)
@@ -96,12 +115,13 @@ def authors_citation_graph(path=""):
                     if (author_source != author_target):
                         edges.append((g["authors_to_index"][author_source], g["authors_to_index"][author_target]))
                     else:
-                        g.vs[g["authors_to_index"][author_source]]["weight"]+=1
+                        g.vs[g["authors_to_index"][author_source]]["weight"] += 1
 
     g.add_edges(edges)
     g.es["weight"] = np.ones(len(edges))
     g = g.simplify(combine_edges='sum')
     return g
+
 
 def authors_collaboration_graph():
     node_information_df = pd.read_csv("data/node_information.csv", header=None)
@@ -127,6 +147,7 @@ def authors_collaboration_graph():
     g.es["weight"] = np.ones(len(edges))
     g = g.simplify(combine_edges='sum')
     return g
+
 
 def remove_stopwords_and_stem(words):
     words = [token for token in words if (len(token) > 2 and (token not in stpwds))]
