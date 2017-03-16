@@ -5,11 +5,11 @@ from tools import articles_graph
 import igraph
 
 
-class CommonNeighboursFeatureExtractor(FeatureExtractor):
+class GraphArticleFeatureExtractor(FeatureExtractor):
     columns = ["commonNeighbours", "coreness_in_f", "coreness_out_f", "coreness_all_f", "id_to_cluster_max", "pagerank"]
 
     def __init__(self, node_information_df, verbose=False, freq=10000, **kargs):
-        super(CommonNeighboursFeatureExtractor, self).__init__(node_information_df, verbose=verbose, freq=freq)
+        super(GraphArticleFeatureExtractor, self).__init__(node_information_df, verbose=verbose, freq=freq)
         self.id_to_index = dict(zip(self.node_information_df.index.values, range(self.node_information_df.index.size)))
         self.index_to_cluster = dict(
             zip(range(self.node_information_df.index.size), np.zeros(len(self.node_information_df.index))))
