@@ -1,6 +1,5 @@
 from preprocessing.FeatureExtractor import FeatureExtractor
 import numpy as np
-import pandas as pd
 from tools import authors_citation_dict, authors_citation_graph, authors_collaboration_graph
 
 

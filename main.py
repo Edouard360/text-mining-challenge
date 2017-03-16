@@ -34,7 +34,7 @@ df_dict["train"] = {
 testing_on_train = True
 compare = False
 early_stopping = False
-features = ["graphAuthors", "graphArticle", 'original', "inOutDegree", "similarity"]
+features = ["graphAuthors", "graphArticle", 'original', "similarity", "inOutDegree"]
 verbose = True
 freq = 10000
 
@@ -88,7 +88,7 @@ labels = df_dict["train"]["df"]["label"].values
 
 classifier = Classifier()
 # classifier = LogisticRegression()
-classifier = RandomForestClassifier(n_estimators=100)
+classifier = RandomForestClassifier(n_estimators=100, random_state=42)
 
 if testing_on_train:
     labels_true = df_dict["test"]["df"]["label"].values
