@@ -2,7 +2,7 @@ import pandas as pd
 from preprocessing.abstractToGraphFeatures.SimilarityFeatureExtractor import SimilarityFeatureExtractor
 from preprocessing.originalFeatures.OriginalFeatureExtractor import OriginalFeatureExtractor
 from preprocessing.inOutFeatures.InOutFeatureExtractor import InOutFeatureExtractor
-from preprocessing.commonNeighboursFeatures.commonNeighboursExtractor import CommonNeighboursFeatureExtractor
+from preprocessing.graphArticleFeatures.graphArticleFeatureExtractor import GraphArticleFeatureExtractor
 from preprocessing.intersectionFeatures.IntersectionFeatureExtractor import IntersectionFeatureExtractor
 from preprocessing.tfidfFeatures.TfidfFeatureExtractor import TfidfFeatureExtractor
 from preprocessing.authorsFeatures.AuthorsFeatureExtractor import AuthorsFeatureExtractor
@@ -34,10 +34,10 @@ class FeatureExporter:
             "extractor": IntersectionFeatureExtractor,
             "default_args": {}
         },
-        "commonNeighbours": {
-            "columns": CommonNeighboursFeatureExtractor.columns,
-            "path": "commonNeighboursFeatures/",
-            "extractor": CommonNeighboursFeatureExtractor,
+        "graphArticle": {
+            "columns": GraphArticleFeatureExtractor.columns,
+            "path": "graphArticleFeatures/",
+            "extractor": GraphArticleFeatureExtractor,
             "default_args": {}
         },
         "tfidf": {
