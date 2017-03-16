@@ -27,11 +27,9 @@ class OriginalFeatureExtractor(FeatureExtractor):
         source_auth = source_info["authors"].split(", ")
         target_auth = target_info["authors"].split(", ")
 
-        source_journal = source_info["journalName"].lower().split(" ")
-        source_journal = remove_stopwords_and_stem(source_journal)
+        source_journal = source_info["journalName"].lower().split(".")
 
-        target_journal = source_info["journalName"].lower().split(" ")
-        target_journal = remove_stopwords_and_stem(target_journal)
+        target_journal = source_info["journalName"].lower().split(".")
 
         self.overlap_title.append(len(set(source_title).intersection(set(target_title))))
         self.temp_diff.append(int(source_info['year']) - int(target_info["year"]))
