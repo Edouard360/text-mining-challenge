@@ -35,7 +35,6 @@ testing_on_train = True
 compare = False
 early_stopping = False
 features = ["authors", "commonNeighbours", 'original', "inOutDegree", "similarity"]
-features += ["pageRank"]
 verbose = True
 freq = 10000
 
