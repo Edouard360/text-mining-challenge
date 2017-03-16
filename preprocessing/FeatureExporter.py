@@ -5,7 +5,7 @@ from preprocessing.inOutFeatures.InOutFeatureExtractor import InOutFeatureExtrac
 from preprocessing.graphArticleFeatures.graphArticleFeatureExtractor import GraphArticleFeatureExtractor
 from preprocessing.intersectionFeatures.IntersectionFeatureExtractor import IntersectionFeatureExtractor
 from preprocessing.tfidfFeatures.TfidfFeatureExtractor import TfidfFeatureExtractor
-from preprocessing.authorsFeatures.AuthorsFeatureExtractor import AuthorsFeatureExtractor
+from preprocessing.graphAuthorsFeatures.GraphAuthorsFeatureExtractor import GraphAuthorsFeatureExtractor
 
 
 class FeatureExporter:
@@ -46,10 +46,10 @@ class FeatureExporter:
             "extractor": TfidfFeatureExtractor,
             "default_args": {}
         },
-        "authors": {
-            "columns": AuthorsFeatureExtractor.columns,
-            "path": "authorsFeatures/",
-            "extractor": AuthorsFeatureExtractor,
+        "graphAuthors": {
+            "columns": GraphAuthorsFeatureExtractor.columns,
+            "path": "graphAuthorsFeatures/",
+            "extractor": GraphAuthorsFeatureExtractor,
             "default_args": {}
         }
     }

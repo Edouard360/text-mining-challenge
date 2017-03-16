@@ -4,7 +4,7 @@ import pandas as pd
 from tools import authors_citation_dict, authors_citation_graph, authors_collaboration_graph
 
 
-class AuthorsFeatureExtractor(FeatureExtractor):
+class GraphAuthorsFeatureExtractor(FeatureExtractor):
     columns = ["meanACiteB_col", "maxACiteB_col",
                "AOut_col", "BIn_col",
                "ACiteAMean_col", "ACiteASum_col",
@@ -15,7 +15,7 @@ class AuthorsFeatureExtractor(FeatureExtractor):
                ]
 
     def __init__(self, node_information_df, verbose=False, freq=10000, **kargs):
-        super(AuthorsFeatureExtractor, self).__init__(node_information_df, verbose=verbose, freq=freq)
+        super(GraphAuthorsFeatureExtractor, self).__init__(node_information_df, verbose=verbose, freq=freq)
         self.id_to_index = dict(zip(self.node_information_df.index.values, range(self.node_information_df.index.size)))
         print("Building authors citation graph")
         self.authors_citation_graph = authors_citation_graph()

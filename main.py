@@ -34,7 +34,7 @@ df_dict["train"] = {
 testing_on_train = True
 compare = False
 early_stopping = False
-features = ["authors", "graphArticle", 'original', "inOutDegree", "similarity"]
+features = ["graphAuthors", "graphArticle", 'original', "inOutDegree", "similarity"]
 verbose = True
 freq = 10000
 
