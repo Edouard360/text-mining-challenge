@@ -4,7 +4,6 @@ from preprocessing.originalFeatures.OriginalFeatureExtractor import OriginalFeat
 from preprocessing.inOutFeatures.InOutFeatureExtractor import InOutFeatureExtractor
 from preprocessing.commonNeighboursFeatures.commonNeighboursExtractor import CommonNeighboursFeatureExtractor
 from preprocessing.intersectionFeatures.IntersectionFeatureExtractor import IntersectionFeatureExtractor
-from preprocessing.pageRankFeatures.PageRankFeatureExtractor import PageRankFeatureExtractor
 from preprocessing.tfidfFeatures.TfidfFeatureExtractor import TfidfFeatureExtractor
 from preprocessing.authorsFeatures.AuthorsFeatureExtractor import AuthorsFeatureExtractor
 
@@ -51,12 +50,6 @@ class FeatureExporter:
             "columns": AuthorsFeatureExtractor.columns,
             "path": "authorsFeatures/",
             "extractor": AuthorsFeatureExtractor,
-            "default_args": {}
-        },
-        "pageRank": {
-            "columns": PageRankFeatureExtractor.columns,
-            "path": "pageRankFeatures/",
-            "extractor": PageRankFeatureExtractor,
             "default_args": {}
         }
     }
