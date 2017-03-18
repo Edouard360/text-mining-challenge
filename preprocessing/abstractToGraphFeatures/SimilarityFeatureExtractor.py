@@ -1,12 +1,14 @@
-from preprocessing.FeatureExtractor import FeatureExtractor
+import os.path
 import numpy as np
 from scipy import sparse
+from preprocessing.FeatureExtractor import FeatureExtractor
 from sklearn.metrics.pairwise import cosine_similarity
-from preprocessing.abstractToGraphFeatures.abstract_to_graph import abstractToGraph
+from preprocessing.abstractToGraphFeatures.abstract_to_graph import abstractToGraph, tfIdfFeatures
+from preprocessing.abstractToGraphFeatures.weighting_scheme import keepHighVarianceFeatures
 
 
 class SimilarityFeatureExtractor(FeatureExtractor):
-    columns = ["similarity"]
+    columns = ["degree", "w_degree", "closeness", "w_closeness", "tfidf"]
 
     def __init__(self, node_information_df, verbose=False, freq=10000, **kargs):
         super(SimilarityFeatureExtractor, self).__init__(node_information_df, verbose=verbose, freq=freq)
@@ -27,27 +29,62 @@ class SimilarityFeatureExtractor(FeatureExtractor):
 
         assert metric in ["closeness", "degrees", "w_closeness", "w_degrees",
                           "tfidf"], "You should select an available metric"
-        try:
-            loader = np.load("preprocessing/abstractToGraphFeatures/metrics/" + metric + ".npz")
-        except Exception:
-            print("Metrics have probably never been created.\nMetrics initialization...")
-            abstractToGraph()
-            loader = np.load("preprocessing/abstractToGraphFeatures/metrics/" + metric + ".npz")
 
-        features = sparse.csr_matrix((loader['data'], loader['indices'], loader['indptr']), shape=loader['shape'])
-        E_M2 = np.array((features).multiply(features).mean(axis=0))
-        E_M_2 = np.array((features).mean(axis=0)) ** 2
-        var = (E_M2 - E_M_2)[0]
+        print("All metrics are going to be used")
+        print("Metrics have probably never been created.\nMetrics initialization...")
+        metrics = ["degrees", "w_degrees", "closeness", "w_closeness"]
+        for metric in metrics:
+            if not os.path.isfile("preprocessing/abstractToGraphFeatures/metrics/" + metric + ".npz"):
+                abstractToGraph()
+                tfIdfFeatures()
+                break
 
-        features_to_keep = (var >= np.percentile(var, percentile))
-        self.features = features[:, features_to_keep].toarray()
+        degrees_loader = np.load("preprocessing/abstractToGraphFeatures/metrics/degrees.npz")
+        w_degrees_loader = np.load("preprocessing/abstractToGraphFeatures/metrics/w_degrees.npz")
+        closeness_loader = np.load("preprocessing/abstractToGraphFeatures/metrics/closeness.npz")
+        w_closeness_loader = np.load("preprocessing/abstractToGraphFeatures/metrics/w_closeness.npz")
+        tfidf_loader = np.load("preprocessing/abstractToGraphFeatures/metrics/w_closeness.npz")
+
+        self.degrees_matrix = keepHighVarianceFeatures(
+            sparse.csr_matrix((degrees_loader['data'], degrees_loader['indices'], degrees_loader['indptr']),
+                              shape=degrees_loader['shape']), percentile=percentile)
+        self.w_degrees_matrix = keepHighVarianceFeatures(
+            sparse.csr_matrix((w_degrees_loader['data'], w_degrees_loader['indices'], w_degrees_loader['indptr']),
+                              shape=w_degrees_loader['shape']), percentile=percentile)
+        self.closeness_matrix = keepHighVarianceFeatures(
+            sparse.csr_matrix((closeness_loader['data'], closeness_loader['indices'], closeness_loader['indptr']),
+                              shape=closeness_loader['shape']), percentile=percentile)
+        self.w_closeness_matrix = keepHighVarianceFeatures(
+            sparse.csr_matrix((w_closeness_loader['data'], w_closeness_loader['indices'], w_closeness_loader['indptr']),
+                              shape=w_closeness_loader['shape']), percentile=percentile)
+        self.tfidf_matrix = keepHighVarianceFeatures(
+            sparse.csr_matrix((tfidf_loader['data'], tfidf_loader['indices'], tfidf_loader['indptr']),
+                              shape=tfidf_loader['shape']), percentile=percentile)
+        self.reset()
 
     def reset(self):
-        self.similarity = []
+        self.degrees_feature, self.w_degrees_feature = [], []
+        self.closeness_feature, self.w_closeness_feature = [], []
+        self.tfidf_feature = []
 
     def extractStep(self, source, target):
-        self.similarity.append(cosine_similarity(self.features[self.id_to_index[source], :].reshape(1, -1),
-                                                 self.features[self.id_to_index[target], :].reshape(1, -1))[0, 0])
+        self.degrees_feature.append(cosine_similarity(self.degrees_matrix[self.id_to_index[source], :].reshape(1, -1),
+                                                      self.degrees_matrix[self.id_to_index[target], :].reshape(1, -1))[
+                                        0, 0])
+        self.w_degrees_feature.append(
+            cosine_similarity(self.w_degrees_matrix[self.id_to_index[source], :].reshape(1, -1),
+                              self.w_degrees_matrix[self.id_to_index[target], :].reshape(1, -1))[0, 0])
+        self.closeness_feature.append(
+            cosine_similarity(self.closeness_matrix[self.id_to_index[source], :].reshape(1, -1),
+                              self.closeness_matrix[self.id_to_index[target], :].reshape(1, -1))[0, 0])
+        self.w_closeness_feature.append(
+            cosine_similarity(self.w_closeness_matrix[self.id_to_index[source], :].reshape(1, -1),
+                              self.w_closeness_matrix[self.id_to_index[target], :].reshape(1, -1))[0, 0])
+        self.tfidf_feature.append(cosine_similarity(self.tfidf_matrix[self.id_to_index[source], :].reshape(1, -1),
+                                                    self.tfidf_matrix[self.id_to_index[target], :].reshape(1, -1))[
+                                      0, 0])
 
     def concatFeature(self):
-        return np.array([self.similarity]).T
+        return np.array([self.degrees_feature, self.w_degrees_feature,
+                         self.closeness_feature, self.w_closeness_feature,
+                         self.tfidf_feature]).T

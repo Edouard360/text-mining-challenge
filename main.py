@@ -34,7 +34,8 @@ df_dict["train"] = {
 testing_on_train = True
 compare = False
 early_stopping = False
-features = ["authors", "graphArticle", 'original', "inOutDegree", "similarity"]
+features = ["authors", "graphArticle", 'original', "inOutDegree", "similarity", "journal", "lsa"]
+# features = []
 verbose = True
 freq = 10000
 
@@ -73,22 +74,22 @@ for key, value in df_dict.items():
                 exporter.exportTo(value["filename"], feature, **parameters)
 
 training_features = FeatureImporter.importFromFile(df_dict["train"]["filename"], features=features, **parameters)
-# training_features = training_features[:,5].reshape(-1,1)
+# training_features = training_features[:,2].reshape(-1,1)
 # training_features_1 = training_features[:,0:2].reshape(-1,2)
 # training_features_2 = training_features[:,3:]
 # training_features = np.concatenate((training_features_1,training_features_2),axis = 1)
 
 testing_features = FeatureImporter.importFromFile(df_dict["test"]["filename"], features=features, **parameters)
-# testing_features = testing_features[:,5].reshape(-1,1)
+# testing_features = testing_features[:,2].reshape(-1,1)
 # testing_features_1 = testing_features[:,0:2].reshape(-1,2)
 # testing_features_2 = testing_features[:,3:]
 # testing_features = np.concatenate((testing_features_1,testing_features_2),axis = 1)
 
 labels = df_dict["train"]["df"]["label"].values
 
-classifier = Classifier()
+# classifier = Classifier()
 # classifier = LogisticRegression()
-classifier = RandomForestClassifier(n_estimators=100)
+classifier = RandomForestClassifier(n_estimators=100, random_state=42)
 
 if testing_on_train:
     labels_true = df_dict["test"]["df"]["label"].values

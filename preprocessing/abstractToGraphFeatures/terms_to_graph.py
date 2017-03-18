@@ -6,6 +6,8 @@ def terms_to_graph(terms, w):
     # This function returns a directed, weighted igraph from a list of terms (the tokens from the pre-processed text) e.g., ['quick','brown','fox']
     # Edges are weighted based on term co-occurence within a sliding window of fixed size 'w'
 
+    w = min(w, len(terms))
+
     from_to = {}
 
     # create initial complete graph (first w terms)
@@ -67,7 +69,7 @@ def terms_to_graph(terms, w):
 def compute_node_centrality(graph):
     # degree
     degrees = graph.degree()
-    degrees = [round(float(degree) / (len(graph.vs) - 1), 5) for degree in degrees]
+    degrees = [round(float(degree) / (len(graph.vs)), 5) for degree in degrees]
 
     # weighted degree
     w_degrees = [vertex["weight"] for vertex in graph.vs]

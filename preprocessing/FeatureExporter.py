@@ -3,9 +3,9 @@ from preprocessing.abstractToGraphFeatures.SimilarityFeatureExtractor import Sim
 from preprocessing.originalFeatures.OriginalFeatureExtractor import OriginalFeatureExtractor
 from preprocessing.inOutFeatures.InOutFeatureExtractor import InOutFeatureExtractor
 from preprocessing.graphArticleFeatures.graphArticleFeatureExtractor import GraphArticleFeatureExtractor
-from preprocessing.intersectionFeatures.IntersectionFeatureExtractor import IntersectionFeatureExtractor
-from preprocessing.tfidfFeatures.TfidfFeatureExtractor import TfidfFeatureExtractor
 from preprocessing.authorsFeatures.AuthorsFeatureExtractor import AuthorsFeatureExtractor
+from preprocessing.lsaFeatures.lsaFeatureExtractor import LsaFeatureExtractor
+from preprocessing.journalFeatures.journalFeatureExtractor import JournalFeatureExtractor
 
 
 class FeatureExporter:
@@ -14,6 +14,18 @@ class FeatureExporter:
             "columns": OriginalFeatureExtractor.columns,
             "path": "originalFeatures/",
             "extractor": OriginalFeatureExtractor,
+            "default_args": {}
+        },
+        "lsa": {
+            "columns": LsaFeatureExtractor.columns,
+            "path": "lsaFeatures/",
+            "extractor": LsaFeatureExtractor,
+            "default_args": {}
+        },
+        "journal": {
+            "columns": JournalFeatureExtractor.columns,
+            "path": "journalFeatures/",
+            "extractor": JournalFeatureExtractor,
             "default_args": {}
         },
         "inOutDegree": {
@@ -28,22 +40,10 @@ class FeatureExporter:
             "extractor": SimilarityFeatureExtractor,
             "default_args": {"metric": "degrees", "percentile": 0.95}
         },
-        "intersection": {
-            "columns": IntersectionFeatureExtractor.columns,
-            "path": "intersectionFeatures/",
-            "extractor": IntersectionFeatureExtractor,
-            "default_args": {}
-        },
         "graphArticle": {
             "columns": GraphArticleFeatureExtractor.columns,
             "path": "graphArticleFeatures/",
             "extractor": GraphArticleFeatureExtractor,
-            "default_args": {}
-        },
-        "tfidf": {
-            "columns": TfidfFeatureExtractor.columns,
-            "path": "tfidfFeatures/",
-            "extractor": TfidfFeatureExtractor,
             "default_args": {}
         },
         "authors": {

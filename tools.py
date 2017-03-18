@@ -6,6 +6,12 @@ import pandas as pd
 from collections import defaultdict
 from itertools import combinations
 from sklearn.metrics import f1_score
+from math import log
+
+# Build a cost dictionary, assuming Zipf's law and cost = -math.log(probability).
+words = open("data/words-by-frequency.txt").read().split()
+wordcost = dict((k, log((i+1)*log(len(words)))) for i,k in enumerate(words))
+maxword = max(len(x) for x in words)
 
 stpwds = set(nltk.corpus.stopwords.words("english"))
 stemmer = nltk.stem.PorterStemmer()
@@ -29,6 +35,61 @@ def articles_graph(path=""):
     g.add_edges(edges)
     return g
 
+def journals_citation_graph(path=""):
+    with open(path + "data/training_set.txt", "r") as f:
+        reader = csv.reader(f)
+        training_set = list(reader)
+
+    training_set = [element[0].split(" ") for element in training_set]
+    node_information_df = pd.read_csv("data/node_information.csv", header=None)
+
+    node_information_df.columns = ["ID", "year", "title", "authors", "journalName", "abstract"]
+    node_information_df = node_information_df.reset_index().set_index("ID")
+    node_information_df["journalName"].fillna("", inplace=True)
+
+    journals = node_information_df["journalName"].values.tolist()
+    unique_journals = list(set(journals))
+
+    journals_sep = [journal.split(".") for journal in journals]
+    journals_sep = [list(filter(None, journal)) for journal in journals_sep]
+    concatenated_journals_sep = np.concatenate(tuple(journals_sep))
+    unique_journals_sep = list(set(concatenated_journals_sep))
+
+    g = igraph.Graph(directed=True)
+    g_sep = igraph.Graph(directed=True)
+
+    g.add_vertices([i for i in range(len(unique_journals))])
+    g.vs["weight"] = np.zeros(len(unique_journals))
+    g["journals_to_index"] = dict(zip(unique_journals, range(len(unique_journals))))
+
+    g_sep.add_vertices([i for i in range(len(unique_journals_sep))])
+    g_sep.vs["weight"] = np.zeros(len(unique_journals_sep))
+    g_sep["journals_sep_to_index"] = dict(zip(unique_journals_sep, range(len(unique_journals_sep))))
+
+    id_to_index = dict(zip(node_information_df.index.values, range(node_information_df.index.size)))
+
+    edges = []
+    edges_sep = []
+    for element in training_set:
+        if element[2] == "1":
+            journal_source = g["journals_to_index"][journals[id_to_index[int(element[0])]]]
+            journal_target = g["journals_to_index"][journals[id_to_index[int(element[1])]]]
+            edges.append((journal_source,journal_target))
+            for journal_sep_source in journals_sep[id_to_index[int(element[0])]]:
+                for journal_sep_target in journals_sep[id_to_index[int(element[1])]]:
+                    if (journal_sep_source != journal_sep_target):
+                        edges_sep.append((g_sep["journals_sep_to_index"][journal_sep_source], g_sep["journals_sep_to_index"][journal_sep_target]))
+                    else:
+                        g_sep.vs[g_sep["journals_sep_to_index"][journal_sep_source]]["weight"] += 1
+
+    g.add_edges(edges)
+    g.es["weight"] = np.ones(len(edges))
+    g = g.simplify(combine_edges='sum')
+
+    g_sep.add_edges(edges_sep)
+    g_sep.es["weight"] = np.ones(len(edges_sep))
+    g_sep = g_sep.simplify(combine_edges='sum')
+    return g, g_sep
 
 def authors_citation_dict(path=""):
     with open(path + "data/training_set.txt", "r") as f:
@@ -123,8 +184,17 @@ def authors_collaboration_graph():
     return g
 
 
-def remove_stopwords_and_stem(words):
+def remove_stopwords_and_stem(words, split_more = False):
     words = [token for token in words if (len(token) > 2 and (token not in stpwds))]
+    if split_more:
+        more = []
+        for word in words:
+            split_word = infer_spaces(word)
+            if(len(split_word)>1):
+                more+=split_word
+            more = [w for w in more if len(w)>3]
+            print(more)
+        words += more
     return [stemmer.stem(token) for token in words]
 
 
@@ -159,3 +229,32 @@ def xgb_f1(y, t):
     # t = t.get_label()
     y_bin = [1. if y_cont > 0.5 else 0. for y_cont in y]  # binaryzing your output
     return 'f1', f1_score(t, y_bin)
+
+
+def infer_spaces(s):
+    """Uses dynamic programming to infer the location of spaces in a string
+    without spaces."""
+
+    # Find the best match for the i first characters, assuming cost has
+    # been built for the i-1 first characters.
+    # Returns a pair (match_cost, match_length).
+    def best_match(i):
+        candidates = enumerate(reversed(cost[max(0, i-maxword):i]))
+        return min((c + wordcost.get(s[i-k-1:i], 9e999), k+1) for k,c in candidates)
+
+    # Build the cost array.
+    cost = [0]
+    for i in range(1,len(s)+1):
+        c,k = best_match(i)
+        cost.append(c)
+
+    # Backtrack to recover the minimal-cost string.
+    out = []
+    i = len(s)
+    while i>0:
+        c,k = best_match(i)
+        assert c == cost[i]
+        out.append(s[i-k:i])
+        i -= k
+
+    return list(reversed(out))
