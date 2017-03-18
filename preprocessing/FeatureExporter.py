@@ -3,7 +3,9 @@ from preprocessing.abstractToGraphFeatures.SimilarityFeatureExtractor import Sim
 from preprocessing.originalFeatures.OriginalFeatureExtractor import OriginalFeatureExtractor
 from preprocessing.inOutFeatures.InOutFeatureExtractor import InOutFeatureExtractor
 from preprocessing.graphArticleFeatures.graphArticleFeatureExtractor import GraphArticleFeatureExtractor
-from preprocessing.authorsFeatures.AuthorsFeatureExtractor import AuthorsFeatureExtractor
+from preprocessing.intersectionFeatures.IntersectionFeatureExtractor import IntersectionFeatureExtractor
+from preprocessing.tfidfFeatures.TfidfFeatureExtractor import TfidfFeatureExtractor
+from preprocessing.graphAuthorsFeatures.GraphAuthorsFeatureExtractor import GraphAuthorsFeatureExtractor
 from preprocessing.lsaFeatures.lsaFeatureExtractor import LsaFeatureExtractor
 from preprocessing.journalFeatures.journalFeatureExtractor import JournalFeatureExtractor
 
@@ -40,16 +42,28 @@ class FeatureExporter:
             "extractor": SimilarityFeatureExtractor,
             "default_args": {"metric": "degrees", "percentile": 0.95}
         },
+        "intersection": {
+            "columns": IntersectionFeatureExtractor.columns,
+            "path": "intersectionFeatures/",
+            "extractor": IntersectionFeatureExtractor,
+            "default_args": {}
+        },
         "graphArticle": {
             "columns": GraphArticleFeatureExtractor.columns,
             "path": "graphArticleFeatures/",
             "extractor": GraphArticleFeatureExtractor,
             "default_args": {}
         },
-        "authors": {
-            "columns": AuthorsFeatureExtractor.columns,
-            "path": "authorsFeatures/",
-            "extractor": AuthorsFeatureExtractor,
+        "tfidf": {
+            "columns": TfidfFeatureExtractor.columns,
+            "path": "tfidfFeatures/",
+            "extractor": TfidfFeatureExtractor,
+            "default_args": {}
+        },
+        "graphAuthors": {
+            "columns": GraphAuthorsFeatureExtractor.columns,
+            "path": "graphAuthorsFeatures/",
+            "extractor": GraphAuthorsFeatureExtractor,
             "default_args": {}
         }
     }
