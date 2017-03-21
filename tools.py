@@ -10,7 +10,7 @@ from math import log
 
 # Build a cost dictionary, assuming Zipf's law and cost = -math.log(probability).
 words = open("data/words-by-frequency.txt").read().split()
-wordcost = dict((k, log((i+1)*log(len(words)))) for i,k in enumerate(words))
+wordcost = dict((k, log((i + 1) * log(len(words)))) for i, k in enumerate(words))
 maxword = max(len(x) for x in words)
 
 stpwds = set(nltk.corpus.stopwords.words("english"))
@@ -34,6 +34,7 @@ def articles_graph(path=""):
             edges.append((g["articles_to_index"][int(element[0])], g["articles_to_index"][int(element[1])]))
     g.add_edges(edges)
     return g
+
 
 def journals_citation_graph(path=""):
     with open(path + "data/training_set.txt", "r") as f:
@@ -74,11 +75,12 @@ def journals_citation_graph(path=""):
         if element[2] == "1":
             journal_source = g["journals_to_index"][journals[id_to_index[int(element[0])]]]
             journal_target = g["journals_to_index"][journals[id_to_index[int(element[1])]]]
-            edges.append((journal_source,journal_target))
+            edges.append((journal_source, journal_target))
             for journal_sep_source in journals_sep[id_to_index[int(element[0])]]:
                 for journal_sep_target in journals_sep[id_to_index[int(element[1])]]:
                     if (journal_sep_source != journal_sep_target):
-                        edges_sep.append((g_sep["journals_sep_to_index"][journal_sep_source], g_sep["journals_sep_to_index"][journal_sep_target]))
+                        edges_sep.append((g_sep["journals_sep_to_index"][journal_sep_source],
+                                          g_sep["journals_sep_to_index"][journal_sep_target]))
                     else:
                         g_sep.vs[g_sep["journals_sep_to_index"][journal_sep_source]]["weight"] += 1
 
@@ -90,6 +92,7 @@ def journals_citation_graph(path=""):
     g_sep.es["weight"] = np.ones(len(edges_sep))
     g_sep = g_sep.simplify(combine_edges='sum')
     return g, g_sep
+
 
 def authors_citation_dict(path=""):
     with open(path + "data/training_set.txt", "r") as f:
@@ -184,15 +187,15 @@ def authors_collaboration_graph():
     return g
 
 
-def remove_stopwords_and_stem(words, split_more = False):
+def remove_stopwords_and_stem(words, split_more=False):
     words = [token for token in words if (len(token) > 2 and (token not in stpwds))]
     if split_more:
         more = []
         for word in words:
             split_word = infer_spaces(word)
-            if(len(split_word)>1):
-                more+=split_word
-            more = [w for w in more if len(w)>3]
+            if (len(split_word) > 1):
+                more += split_word
+            more = [w for w in more if len(w) > 3]
             print(more)
         words += more
     return [stemmer.stem(token) for token in words]
@@ -239,22 +242,22 @@ def infer_spaces(s):
     # been built for the i-1 first characters.
     # Returns a pair (match_cost, match_length).
     def best_match(i):
-        candidates = enumerate(reversed(cost[max(0, i-maxword):i]))
-        return min((c + wordcost.get(s[i-k-1:i], 9e999), k+1) for k,c in candidates)
+        candidates = enumerate(reversed(cost[max(0, i - maxword):i]))
+        return min((c + wordcost.get(s[i - k - 1:i], 9e999), k + 1) for k, c in candidates)
 
     # Build the cost array.
     cost = [0]
-    for i in range(1,len(s)+1):
-        c,k = best_match(i)
+    for i in range(1, len(s) + 1):
+        c, k = best_match(i)
         cost.append(c)
 
     # Backtrack to recover the minimal-cost string.
     out = []
     i = len(s)
-    while i>0:
-        c,k = best_match(i)
+    while i > 0:
+        c, k = best_match(i)
         assert c == cost[i]
-        out.append(s[i-k:i])
+        out.append(s[i - k:i])
         i -= k
 
     return list(reversed(out))
