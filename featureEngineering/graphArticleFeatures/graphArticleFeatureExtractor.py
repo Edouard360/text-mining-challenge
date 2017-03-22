@@ -56,5 +56,8 @@ class GraphArticleFeatureExtractor(FeatureExtractor):
         self.outdegree.append(self.node_degree_df[self.id_to_index[target], 1])
 
     def concatFeature(self):
-        return np.array([self.commonNeighbours, self.coreness_in_f, self.coreness_out_f, self.coreness_all_f,
-                         self.id_to_cluster_max, self.pagerank_f, self.indegree, self.outdegree]).T
+        return np.array([self.indegree, self.outdegree, self.commonNeighbours,
+                         self.coreness_in_f,
+                         self.coreness_out_f,
+                         self.coreness_all_f,
+                         self.id_to_cluster_max, self.pagerank_f]).T
