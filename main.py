@@ -4,10 +4,8 @@ from classifier import Classifier
 from tools import random_sample
 from sklearn import metrics
 from sklearn.ensemble import RandomForestClassifier
-import numpy as np
 from preprocessing.FeatureExporter import FeatureExporter
 from preprocessing.FeatureImporter import FeatureImporter
-from sklearn.linear_model.logistic import LogisticRegression
 
 time_sub = strftime("%Y-%m-%d %H:%M:%S", localtime()).replace(' ', '__')
 
@@ -87,7 +85,7 @@ testing_features = FeatureImporter.importFromFile(df_dict["test"]["filename"], f
 
 labels = df_dict["train"]["df"]["label"].values
 
-classifier = Classifier()
+# classifier = Classifier()
 # classifier = LogisticRegression()
 classifier = RandomForestClassifier(n_estimators=100)
 
