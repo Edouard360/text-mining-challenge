@@ -31,7 +31,7 @@ df_dict["train"] = {
 
 testing_on_train = True
 compare = False
-early_stopping = False
+early_stopping = True
 features = ["graphAuthors", "graphArticle", 'original', "similarity", "journal", "lsa"]
 # features = []
 verbose = True
@@ -85,9 +85,9 @@ testing_features = FeatureImporter.importFromFile(df_dict["test"]["filename"], f
 
 labels = df_dict["train"]["df"]["label"].values
 
-# classifier = Classifier()
+classifier = Classifier()
 # classifier = LogisticRegression()
-classifier = RandomForestClassifier(n_estimators=100)
+# classifier = RandomForestClassifier(n_estimators=100)
 
 if testing_on_train:
     labels_true = df_dict["test"]["df"]["label"].values
