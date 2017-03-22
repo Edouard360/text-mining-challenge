@@ -1,4 +1,4 @@
-from preprocessing.FeatureExtractor import FeatureExtractor
+from featureEngineering.FeatureExtractor import FeatureExtractor
 from tools import remove_stopwords_and_stem
 import numpy as np
 

@@ -2,9 +2,9 @@ import numpy as np
 import pandas as pd
 import csv
 from scipy import sparse
-from preprocessing.abstractToGraphFeatures.terms_to_graph import terms_to_graph, compute_node_centrality
+from featureEngineering.abstractFeatures.terms_to_graph import terms_to_graph, compute_node_centrality
 from tools import remove_stopwords_and_stem
-from preprocessing.abstractToGraphFeatures.weighting_scheme import weightingScheme, computeTfidf
+from featureEngineering.abstractFeatures.weighting_scheme import weightingScheme, computeTfidf
 
 
 def getAbstractList():
@@ -12,12 +12,12 @@ def getAbstractList():
     abstract_information_df.columns = ["ID", "abstract"]
     abstract_information_df = abstract_information_df.reset_index().set_index("ID")
     try:
-        with open('preprocessing/abstractToGraphFeatures/abstract_list.csv', 'r') as f:
+        with open('featureEngineering/abstractFeatures/abstract_list.csv', 'r') as f:
             abstract_list = []
             for line in f:
                 abstract_list = abstract_list + [line[:-1].split(",")]
     except IOError:
-        with open("preprocessing/abstractToGraphFeatures/abstract_list.csv", "w") as f:
+        with open("featureEngineering/abstractFeatures/abstract_list.csv", "w") as f:
             print("It seems abstract_list.csv has never been created.\nCreating abstract_list.csv")
             abstract_list = abstract_information_df["abstract"].values
             abstract_list = [remove_stopwords_and_stem(abstract.split(" ")) for abstract in abstract_list]
@@ -52,12 +52,12 @@ def abstractToGraph(path=""):
             for index_m, m in enumerate(metrics):
                 features_dict[m][i, col_index] = row[index_m + 1]
 
-    print("Saving metrics to preprocessing/abstractToGraphFeatures/metrics/ folder")
+    print("Saving metrics to featureEngineering/abstractFeatures/metrics/ folder")
     _, idf = computeTfidf(abstract_list, index_dict, unique_words)
     for m in metrics:
         csr_matrix = features_dict[m].tocsr()
         csr_matrix = weightingScheme(csr_matrix, idf, doc_len)
-        np.savez("preprocessing/abstractToGraphFeatures/metrics/" + m, data=csr_matrix.data, indices=csr_matrix.indices,
+        np.savez("featureEngineering/abstractFeatures/metrics/" + m, data=csr_matrix.data, indices=csr_matrix.indices,
                  indptr=csr_matrix.indptr, shape=csr_matrix.shape)
 
 
@@ -73,5 +73,5 @@ def tfIdfFeatures(path=""):
     tf, idf = computeTfidf(abstract_list, index_dict)
     csr_tfidf = weightingScheme(tf, idf, doc_len, tf_scheme="BM25")
 
-    np.savez("preprocessing/abstractToGraphFeatures/metrics/tfidf", data=csr_tfidf.data, indices=csr_tfidf.indices,
+    np.savez("featureEngineering/abstractFeatures/metrics/tfidf", data=csr_tfidf.data, indices=csr_tfidf.indices,
              indptr=csr_tfidf.indptr, shape=csr_tfidf.shape)

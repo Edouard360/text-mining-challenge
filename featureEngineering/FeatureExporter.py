@@ -1,14 +1,20 @@
 import pandas as pd
-from preprocessing.abstractToGraphFeatures.SimilarityFeatureExtractor import SimilarityFeatureExtractor
-from preprocessing.originalFeatures.OriginalFeatureExtractor import OriginalFeatureExtractor
-from preprocessing.inOutFeatures.InOutFeatureExtractor import InOutFeatureExtractor
-from preprocessing.graphArticleFeatures.graphArticleFeatureExtractor import GraphArticleFeatureExtractor
-from preprocessing.graphAuthorsFeatures.GraphAuthorsFeatureExtractor import GraphAuthorsFeatureExtractor
-from preprocessing.lsaFeatures.lsaFeatureExtractor import LsaFeatureExtractor
-from preprocessing.journalFeatures.journalFeatureExtractor import JournalFeatureExtractor
+from featureEngineering.abstractFeatures.SimilarityFeatureExtractor import SimilarityFeatureExtractor
+from featureEngineering.originalFeatures.OriginalFeatureExtractor import OriginalFeatureExtractor
+from featureEngineering.graphArticleFeatures.graphArticleFeatureExtractor import GraphArticleFeatureExtractor
+from featureEngineering.graphAuthorsFeatures.GraphAuthorsFeatureExtractor import GraphAuthorsFeatureExtractor
+from featureEngineering.lsaFeatures.lsaFeatureExtractor import LsaFeatureExtractor
+from featureEngineering.journalFeatures.journalFeatureExtractor import JournalFeatureExtractor
 
 
 class FeatureExporter:
+    """
+    The FeatureExporter class.
+    This class exports features as "*.txt" files in the /output folder of the corresponding feature.
+    This coding scheme helps to compute a feature only once.
+    All available features are given as a static member to the FeatureExporter object.
+    Each feature comes with its own Extractor, its columns names, and the path to the folder containing the feature.
+    """
     available_features = {
         "original": {
             "columns": OriginalFeatureExtractor.columns,
@@ -28,15 +34,9 @@ class FeatureExporter:
             "extractor": JournalFeatureExtractor,
             "default_args": {}
         },
-        "inOutDegree": {
-            "columns": InOutFeatureExtractor.columns,  # A changer avec target_indegree for clarity (EDOUARD T NUL)
-            "path": "inOutFeatures/",
-            "extractor": InOutFeatureExtractor,
-            "default_args": {}
-        },
         "similarity": {
             "columns": SimilarityFeatureExtractor.columns,
-            "path": "abstractToGraphFeatures/",
+            "path": "abstractFeatures/",
             "extractor": SimilarityFeatureExtractor,
             "default_args": {"metric": "degrees", "percentile": 0.95}
         },
@@ -63,23 +63,31 @@ class FeatureExporter:
 
     @staticmethod
     def pathListBuilder(filename, features=available_features.keys(), **kargs):
+        """
+        :param filename: a string like "training_set.txt" or "testing_set.txt"
+        :param feature: the name of the feature like "lsa"
+        This function computes the path to the file, for the export. It can be for instance:
+        "featureEngineering/lsaFeatures/output/testing_set.txt"
+        """
         path_list = []
         for key, value in FeatureExporter.available_features.items():
             if key in features:
                 keys_to_keep = list(set(value["default_args"].keys()) & set(kargs.keys()))
                 keys_to_keep.sort()
                 suffix = "".join([key_str + "_" + str(kargs[key_str]) + "_" for key_str in keys_to_keep])
-                path_list.append("preprocessing/" + value["path"] + "output/" + suffix + filename)
+                path_list.append("featureEngineering/" + value["path"] + "output/" + suffix + filename)
         assert len(path_list) > 0, "You should select existing features among \n:" + str(
             FeatureExporter.available_features.keys())
         return path_list
 
-    def exportAllTo(self, df, node_information_df, filename):
-        for key, value in FeatureExporter.available_features.items():
-            self.computeFeature(df, node_information_df, key, **(value["default_args"]))
-            self.exportTo(filename)
-
     def computeFeature(self, df, node_information_df, feature, **kargs):
+        """
+        :param df: A dataframe object created from testing_set and training_set.
+        :param node_information_df: The node information dataframe (which is used in almost all features)
+        :param feature:
+        The computeFeature function.
+        Computes the feature given as string if it is in the available feature list.
+        """
         keys = FeatureExporter.available_features.keys()
         assert feature in keys, "Choose among those features :" + str(keys)
         if not (self.current_feature_name == feature):
@@ -91,6 +99,14 @@ class FeatureExporter:
         self.extractor.reset()
 
     def exportTo(self, filename, feature, **kargs):
+        """
+        :param filename: a string like "training_set.txt" or "testing_set.txt"
+        :param feature: the name of the feature like "lsa"
+        :param kargs: Only in case additional parameters are used for the extractor.
+        After the computeFeature function, the exportTo function exports the feature as a "*.txt" file.
+        The path to this file is computed using the pathListBuilder function, and can be for instance:
+        "featureEngineering/lsaFeatures/output/testing_set.txt"
+        """
         self.feature = pd.DataFrame(self.feature)
         self.feature.columns = self.current_feature["columns"]
         self.feature.to_csv(FeatureExporter.pathListBuilder(filename, feature, **kargs)[0])
