@@ -7,7 +7,7 @@ from matplotlib import pyplot
 class Classifier(BaseEstimator):
     def __init__(self):
         self.name = "XGBClassifier"
-        self.n_estimators = 792
+        self.n_estimators = 500
         self.max_depth = 10
         self.clf = xgb.XGBClassifier(n_estimators=self.n_estimators,
                                      max_depth=self.max_depth,
@@ -31,10 +31,7 @@ class Classifier(BaseEstimator):
     def plotlearningcurves(self, eval_set):
         self.clf.fit(eval_set[0][0], eval_set[0][1], eval_metric=["logloss", "error"],
                      eval_set=eval_set, verbose=False)
-        labels_true = df_dict["test"]["df"]["label"].values
-
-        labels_pred = classifier.predict(testing_features)
-        results = classifier.evals_result()
+        results = self.clf.evals_result()
         epochs = len(results['validation_0']['error'])
         x_axis = range(0, epochs)
         # plot log loss
@@ -44,7 +41,8 @@ class Classifier(BaseEstimator):
         ax.legend()
         pyplot.ylabel('Log Loss')
         pyplot.title('XGBoost Log Loss')
-        pyplot.show()
+        # pyplot.show()
+        pyplot.savefig("report/figures/logloss_learning_curve")
         # plot classification error
         fig, ax = pyplot.subplots()
         ax.plot(x_axis, results['validation_0']['error'], label='Train')
@@ -52,9 +50,10 @@ class Classifier(BaseEstimator):
         ax.legend()
         pyplot.ylabel('Classification Error')
         pyplot.title('XGBoost Classification Error')
-        pyplot.show()
+#        pyplot.show()
+        pyplot.savefig("report/figures/classification_error_learning_curve")
         # # plot f1 score
-        # fig, ax = pyplot.subplots()
+        # figures, ax = pyplot.subplots()
         # ax.plot(x_axis, results['validation_0']['f1'], label='Train')
         # ax.plot(x_axis, results['validation_1']['f1'], label='Test')
         # ax.legend()
