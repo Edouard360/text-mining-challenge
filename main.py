@@ -2,8 +2,10 @@ from time import localtime, strftime
 import pandas as pd
 from classifier import Classifier
 from tools import random_sample
-from sklearn import metrics
+
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn import metrics, svm
 from featureEngineering.FeatureExporter import FeatureExporter
 from featureEngineering.FeatureImporter import FeatureImporter
 
@@ -85,9 +87,10 @@ testing_features = FeatureImporter.importFromFile(df_dict["test"]["filename"], f
 
 labels = df_dict["train"]["df"]["label"].values
 
-classifier = Classifier()
+# classifier = Classifier()
 # classifier = LogisticRegression()
-# classifier = RandomForestClassifier(n_estimators=100)
+# classifier = RandomForestClassifier(n_estimators=10)
+classifier = svm.LinearSVC()
 
 if testing_on_train:
     labels_true = df_dict["test"]["df"]["label"].values

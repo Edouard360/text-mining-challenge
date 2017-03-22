@@ -7,7 +7,7 @@ from matplotlib import pyplot
 class Classifier(BaseEstimator):
     def __init__(self):
         self.name = "XGBClassifier"
-        self.n_estimators = 500
+        self.n_estimators = 100
         self.max_depth = 10
         self.clf = xgb.XGBClassifier(n_estimators=self.n_estimators,
                                      max_depth=self.max_depth,
