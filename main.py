@@ -31,7 +31,7 @@ df_dict["train"] = {
 
 testing_on_train = True
 compare = False
-early_stopping = True
+early_stopping = False
 features = ["graphAuthors", "graphArticle", 'original', "similarity", "journal", "lsa"]
 # features = []
 verbose = True
