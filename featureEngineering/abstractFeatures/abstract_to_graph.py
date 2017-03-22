@@ -70,7 +70,7 @@ def tfIdfFeatures(path=""):
     index_dict = dict(zip(unique_words, range(len(unique_words))))
     doc_len = np.array([len(abstract) for abstract in abstract_list])
 
-    tf, idf = computeTfidf(abstract_list, index_dict)
+    tf, idf = computeTfidf(abstract_list, index_dict, unique_words)
     csr_tfidf = weightingScheme(tf, idf, doc_len, tf_scheme="BM25")
 
     np.savez("featureEngineering/abstractFeatures/metrics/tfidf", data=csr_tfidf.data, indices=csr_tfidf.indices,
