@@ -31,6 +31,8 @@ We compared these classifiers, and obtained the respective performance
 - Gradient Boosting
 - Random Forest Regressor
 - Logistic Regression
+
+
 |Algorithm|F1 score|
 |---|:---:|
 |Gradient Boosting|0.9|
