@@ -1,10 +1,10 @@
 import os.path
 import numpy as np
 from scipy import sparse
-from preprocessing.FeatureExtractor import FeatureExtractor
+from featureEngineering.FeatureExtractor import FeatureExtractor
 from sklearn.metrics.pairwise import cosine_similarity
-from preprocessing.abstractToGraphFeatures.abstract_to_graph import abstractToGraph, tfIdfFeatures
-from preprocessing.abstractToGraphFeatures.weighting_scheme import keepHighVarianceFeatures
+from featureEngineering.abstractFeatures.abstract_to_graph import abstractToGraph, tfIdfFeatures
+from featureEngineering.abstractFeatures.weighting_scheme import keepHighVarianceFeatures
 
 
 class SimilarityFeatureExtractor(FeatureExtractor):
@@ -34,16 +34,16 @@ class SimilarityFeatureExtractor(FeatureExtractor):
         print("Metrics have probably never been created.\nMetrics initialization...")
         metrics = ["degrees", "w_degrees", "closeness", "w_closeness"]
         for metric in metrics:
-            if not os.path.isfile("preprocessing/abstractToGraphFeatures/metrics/" + metric + ".npz"):
+            if not os.path.isfile("featureEngineering/abstractFeatures/metrics/" + metric + ".npz"):
                 abstractToGraph()
                 tfIdfFeatures()
                 break
 
-        degrees_loader = np.load("preprocessing/abstractToGraphFeatures/metrics/degrees.npz")
-        w_degrees_loader = np.load("preprocessing/abstractToGraphFeatures/metrics/w_degrees.npz")
-        closeness_loader = np.load("preprocessing/abstractToGraphFeatures/metrics/closeness.npz")
-        w_closeness_loader = np.load("preprocessing/abstractToGraphFeatures/metrics/w_closeness.npz")
-        tfidf_loader = np.load("preprocessing/abstractToGraphFeatures/metrics/w_closeness.npz")
+        degrees_loader = np.load("featureEngineering/abstractFeatures/metrics/degrees.npz")
+        w_degrees_loader = np.load("featureEngineering/abstractFeatures/metrics/w_degrees.npz")
+        closeness_loader = np.load("featureEngineering/abstractFeatures/metrics/closeness.npz")
+        w_closeness_loader = np.load("featureEngineering/abstractFeatures/metrics/w_closeness.npz")
+        tfidf_loader = np.load("featureEngineering/abstractFeatures/metrics/w_closeness.npz")
 
         self.degrees_matrix = keepHighVarianceFeatures(
             sparse.csr_matrix((degrees_loader['data'], degrees_loader['indices'], degrees_loader['indptr']),

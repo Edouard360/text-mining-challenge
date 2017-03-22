@@ -4,8 +4,8 @@ from classifier import Classifier
 from tools import random_sample
 from sklearn import metrics
 from sklearn.ensemble import RandomForestClassifier
-from preprocessing.FeatureExporter import FeatureExporter
-from preprocessing.FeatureImporter import FeatureImporter
+from featureEngineering.FeatureExporter import FeatureExporter
+from featureEngineering.FeatureImporter import FeatureImporter
 
 time_sub = strftime("%Y-%m-%d %H:%M:%S", localtime()).replace(' ', '__')
 

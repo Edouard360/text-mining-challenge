@@ -1,9 +1,9 @@
 class FeatureExtractor:
     """
-    An abstract class for the feature extractors.
-    Derived classes are in the subfolders
+    An abstract class for the feature extractors. Derived classes are in the subfolders.
+    This parent class enables, for all Extractors, to have an insight into the speed of the computation,
+    via the "freq" parameter. By default, it will print: 'n samples processed' every 10000 samples.
     """
-
     def __init__(self, node_information_df, verbose=False, freq=10000):
         self.counter = 0
         self.freq = freq
@@ -16,7 +16,7 @@ class FeatureExtractor:
             self.extractStep(source, target)
             self.counter += 1
             if self.verbose and (self.counter % self.freq == 1):
-                print(self.counter, " examples processed")
+                print(self.counter, " samples processed")
         self.counter = 0
         return self.concatFeature()
 

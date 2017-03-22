@@ -1,4 +1,4 @@
-from preprocessing.FeatureExtractor import FeatureExtractor
+from featureEngineering.FeatureExtractor import FeatureExtractor
 import numpy as np
 from tools import authors_citation_dict, authors_citation_graph, authors_collaboration_graph
 
