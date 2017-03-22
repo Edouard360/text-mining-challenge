@@ -212,7 +212,7 @@ def random_sample(df, p=0.05, seed=42):
 
 def stats_df(df):
     '''
-    Gives stats about the dataframe
+    Gives some basic stats about the dataframe
     '''
     print("Nb lines in the train : ", len(df["from"]))
     print("Nb of unique nodes : ", len(df["from"].unique()))
