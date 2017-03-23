@@ -1,5 +1,8 @@
 # text-mining-challenge
-A text mining challenge from course INF582.
+A text mining challenge from course INF582.  
+Please check out the [github version of our repository][link] for a tidier display of this README.md file !
+
+[link]: <https://github.com/Edouard360/text-mining-challenge>
 
 ## Code structure 
 
@@ -24,14 +27,25 @@ Note that in each folder Features/ a folder output/ should be included.
 
 ## Feature Engineering
 
+We compared each features individually on the same cross validation training-testing-set, 
+using the same regressor: RandomForestRegressor with random_state set to 42. 
+
+Bear in mind that these are **feature sets**, and not a single feature. For instance, the graphAuthors feature set is composed of
+7 features ("meanACiteB_col", "maxACiteB_col","AOut_col", "BIn_col","ACiteAMean_col", "ACiteASum_col","BOut_col")
+
+
+|Feature Set|Individual F1 score|
+|---|:---:|
+|'lsa' |0.576185|
+|'original' |0.811745|
+|'graphAuthors' |0.879161|
+|'graphArticles' |0.992431|
+|'journal' |0.611100|
+|'similarity' |0.778112|
+
 ## Model tuning and comparison 
  
 We compared these classifiers, and obtained the respective performance
-
-- Gradient Boosting
-- Random Forest Regressor
-- Logistic Regression
-
 
 |Algorithm|F1 score|
 |---|:---:|
