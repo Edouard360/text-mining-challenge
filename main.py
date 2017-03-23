@@ -2,10 +2,8 @@ from time import localtime, strftime
 import pandas as pd
 from classifier import Classifier
 from tools import random_sample
-
+from sklearn import metrics
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.linear_model import LogisticRegression
-from sklearn import metrics, svm
 from featureEngineering.FeatureExporter import FeatureExporter
 from featureEngineering.FeatureImporter import FeatureImporter
 
@@ -32,32 +30,21 @@ df_dict["train"] = {
 }
 
 testing_on_train = True
-compare = False
 early_stopping = False
 features = ["graphAuthors", "graphArticle", 'original', "similarity", "journal", "lsa"]
 # features = []
 verbose = True
 freq = 10000
 
-# By uncommenting you can tune in the parameters
+# By uncommenting you can tune in the parameters, for building the graph
 parameters = {}
 # parameters = {"percentile":95,"metric":"degrees"}
 
 if testing_on_train:
-    if not compare:
-        df_dict["test"] = {
-            "filename": 'testing_training_set.txt',
-            "df": random_sample(train_df, p=0.05, seed=43)
-        }
-    else:
-        s_test = pd.read_csv("submissions/final_submission.csv", sep=",")
-        s_test = pd.concat((test_df, s_test), axis=1)
-        del s_test["id"]
-        s_test.columns = ["source", "target", "label"]
-        df_dict["test"] = {
-            "filename": 'testing_set.txt',
-            "df": s_test
-        }
+    df_dict["test"] = {
+        "filename": 'testing_training_set.txt',
+        "df": random_sample(train_df, p=0.05, seed=43)
+    }
 else:
     df_dict["test"] = {
         "filename": 'testing_set.txt',
@@ -87,10 +74,9 @@ testing_features = FeatureImporter.importFromFile(df_dict["test"]["filename"], f
 
 labels = df_dict["train"]["df"]["label"].values
 
-# classifier = Classifier()
+classifier = Classifier()
 # classifier = LogisticRegression()
-# classifier = RandomForestClassifier(n_estimators=10)
-classifier = svm.LinearSVC()
+# classifier = RandomForestClassifier(n_estimators=100, random_state=42)
 
 if testing_on_train:
     labels_true = df_dict["test"]["df"]["label"].values
