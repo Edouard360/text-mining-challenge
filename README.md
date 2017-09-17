@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/Edouard360/text-mining-challenge.svg?branch=master)](https://travis-ci.org/Edouard360/text-mining-challenge)
+
 # text-mining-challenge
 A text mining challenge from course INF582.  
 Please check out the [github version of our repository][link] for a tidier display of this README.md file !
