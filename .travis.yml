@@ -4,7 +4,7 @@ python:
   - 3.5
 install: true
   - pip install tox
-  - pip install -r requirements.txt
+#  - pip install -r requirements.txt
 # command to run tests
 env:
   - $COVPYYAML=cov41-pyyaml,coveralls41
