@@ -11,6 +11,8 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
+   Test1
+   Test2
 
 
 Indices and tables
@@ -20,3 +22,16 @@ Indices and tables
 * :ref:`modindex`
 * :ref:`search`
 
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Contributors
+
+   louis
+   edouard
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Events
+
+   events/index
