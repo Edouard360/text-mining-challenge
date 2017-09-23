@@ -1,5 +1,5 @@
 from featureEngineering.FeatureExtractor import FeatureExtractor
-from tools import remove_stopwords_and_stem
+from tools_stemmer import remove_stopwords_and_stem
 import numpy as np
 
 
