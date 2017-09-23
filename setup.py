@@ -21,11 +21,11 @@ setup(
     author='coveralls-clients contributors',
     description='Show coverage stats online via coveralls.io',
     # long_description=DESCRIPTION,
-    entry_points={
-        'console_scripts': [
-            'coveralls = coveralls.cli:main',
-        ],
-    },
+    # entry_points={
+    #     'console_scripts': [
+    #         'coveralls = coveralls.cli:main',
+    #     ],
+    # },
     install_requires=['docopt>=0.6.1', 'coverage>=3.6', 'requests>=1.0.0'],
     setup_requires=['pytest-runner'],
     tests_require=['mock', 'pytest', 'sh>=1.08'],
