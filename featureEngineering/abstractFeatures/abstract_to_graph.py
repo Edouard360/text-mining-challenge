@@ -1,10 +1,12 @@
+import csv
+
 import numpy as np
 import pandas as pd
-import csv
 from scipy import sparse
-from featureEngineering.abstractFeatures.terms_to_graph import terms_to_graph, compute_node_centrality
+
+from featureEngineering.abstractFeatures.terms_to_graph import compute_node_centrality, terms_to_graph
+from featureEngineering.abstractFeatures.weighting_scheme import computeTfidf, weightingScheme
 from tools import remove_stopwords_and_stem
-from featureEngineering.abstractFeatures.weighting_scheme import weightingScheme, computeTfidf
 
 
 def getAbstractList():

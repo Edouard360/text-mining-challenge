@@ -1,7 +1,8 @@
 import numpy as np
-from featureEngineering.FeatureExtractor import FeatureExtractor
-from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+
+from featureEngineering.FeatureExtractor import FeatureExtractor
 
 
 class LsaFeatureExtractor(FeatureExtractor):

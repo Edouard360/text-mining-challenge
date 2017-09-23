@@ -1,6 +1,4 @@
-import os
 from setuptools import setup
-
 
 # VERSION_FILE = os.path.join(os.path.abspath(os.path.dirname(__file__)),
 #                             'coveralls', 'version.py')
@@ -15,7 +13,7 @@ from setuptools import setup
 setup(
     name='coveralls',
     # version=VERSION,
-    #packages=['coveralls'],
+    # packages=['coveralls'],
     url='http://github.com/coveralls-clients/coveralls-python',
     license='MIT',
     author='coveralls-clients contributors',

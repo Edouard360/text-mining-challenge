@@ -1,5 +1,6 @@
-from featureEngineering.FeatureExtractor import FeatureExtractor
 import numpy as np
+
+from featureEngineering.FeatureExtractor import FeatureExtractor
 from tools import journals_citation_graph
 
 
