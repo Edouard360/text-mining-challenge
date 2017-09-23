@@ -6,7 +6,7 @@ import pandas as pd
 from collections import defaultdict
 from itertools import combinations
 from sklearn.metrics import f1_score
-from math import log
+#from math import log
 
 # Build a cost dictionary, assuming Zipf's law and cost = -math.log(probability).
 # words = open("data/words-by-frequency.txt").read().split()

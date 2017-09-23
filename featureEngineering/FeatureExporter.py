@@ -1,10 +1,10 @@
 import pandas as pd
-from featureEngineering.abstractFeatures.SimilarityFeatureExtractor import SimilarityFeatureExtractor
 from featureEngineering.originalFeatures.OriginalFeatureExtractor import OriginalFeatureExtractor
-from featureEngineering.graphArticleFeatures.graphArticleFeatureExtractor import GraphArticleFeatureExtractor
-from featureEngineering.graphAuthorsFeatures.GraphAuthorsFeatureExtractor import GraphAuthorsFeatureExtractor
-from featureEngineering.lsaFeatures.lsaFeatureExtractor import LsaFeatureExtractor
-from featureEngineering.journalFeatures.journalFeatureExtractor import JournalFeatureExtractor
+# from featureEngineering.graphArticleFeatures.graphArticleFeatureExtractor import GraphArticleFeatureExtractor
+# from featureEngineering.graphAuthorsFeatures.GraphAuthorsFeatureExtractor import GraphAuthorsFeatureExtractor
+# from featureEngineering.lsaFeatures.lsaFeatureExtractor import LsaFeatureExtractor
+# from featureEngineering.journalFeatures.journalFeatureExtractor import JournalFeatureExtractor
+# from featureEngineering.abstractFeatures.SimilarityFeatureExtractor import SimilarityFeatureExtractor
 
 
 class FeatureExporter:
@@ -21,37 +21,37 @@ class FeatureExporter:
             "path": "originalFeatures/",
             "extractor": OriginalFeatureExtractor,
             "default_args": {}
-        },
-        "lsa": {
-            "columns": LsaFeatureExtractor.columns,
-            "path": "lsaFeatures/",
-            "extractor": LsaFeatureExtractor,
-            "default_args": {}
-        },
-        "journal": {
-            "columns": JournalFeatureExtractor.columns,
-            "path": "journalFeatures/",
-            "extractor": JournalFeatureExtractor,
-            "default_args": {}
-        },
-        "similarity": {
-            "columns": SimilarityFeatureExtractor.columns,
-            "path": "abstractFeatures/",
-            "extractor": SimilarityFeatureExtractor,
-            "default_args": {"metric": "degrees", "percentile": 0.95}
-        },
-        "graphArticle": {
-            "columns": GraphArticleFeatureExtractor.columns,
-            "path": "graphArticleFeatures/",
-            "extractor": GraphArticleFeatureExtractor,
-            "default_args": {}
-        },
-        "graphAuthors": {
-            "columns": GraphAuthorsFeatureExtractor.columns,
-            "path": "graphAuthorsFeatures/",
-            "extractor": GraphAuthorsFeatureExtractor,
-            "default_args": {}
         }
+        # "lsa": {
+        #     "columns": LsaFeatureExtractor.columns,
+        #     "path": "lsaFeatures/",
+        #     "extractor": LsaFeatureExtractor,
+        #     "default_args": {}
+        # },
+        # "journal": {
+        #     "columns": JournalFeatureExtractor.columns,
+        #     "path": "journalFeatures/",
+        #     "extractor": JournalFeatureExtractor,
+        #     "default_args": {}
+        # },
+        # "similarity": {
+        #     "columns": SimilarityFeatureExtractor.columns,
+        #     "path": "abstractFeatures/",
+        #     "extractor": SimilarityFeatureExtractor,
+        #     "default_args": {"metric": "degrees", "percentile": 0.95}
+        # },
+        # "graphArticle": {
+        #     "columns": GraphArticleFeatureExtractor.columns,
+        #     "path": "graphArticleFeatures/",
+        #     "extractor": GraphArticleFeatureExtractor,
+        #     "default_args": {}
+        # },
+        # "graphAuthors": {
+        #     "columns": GraphAuthorsFeatureExtractor.columns,
+        #     "path": "graphAuthorsFeatures/",
+        #     "extractor": GraphAuthorsFeatureExtractor,
+        #     "default_args": {}
+        # }
     }
 
     def __init__(self, verbose=False, freq=10000):
