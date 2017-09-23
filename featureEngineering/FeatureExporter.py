@@ -1,4 +1,5 @@
 import pandas as pd
+import os
 from featureEngineering.originalFeatures.OriginalFeatureExtractor import OriginalFeatureExtractor
 # from featureEngineering.graphArticleFeatures.graphArticleFeatureExtractor import GraphArticleFeatureExtractor
 # from featureEngineering.graphAuthorsFeatures.GraphAuthorsFeatureExtractor import GraphAuthorsFeatureExtractor
@@ -75,7 +76,10 @@ class FeatureExporter:
                 keys_to_keep = list(set(value["default_args"].keys()) & set(kargs.keys()))
                 keys_to_keep.sort()
                 suffix = "".join([key_str + "_" + str(kargs[key_str]) + "_" for key_str in keys_to_keep])
-                path_list.append("featureEngineering/" + value["path"] + "output/" + suffix + filename)
+                new_path = "featureEngineering/" + value["path"] + "output/" + suffix + filename
+                if ("test" in kargs):
+                    new_path = "../"+new_path
+                path_list.append(new_path)
         assert len(path_list) > 0, "You should select existing features among \n:" + str(
             FeatureExporter.available_features.keys())
         return path_list
