@@ -11,7 +11,7 @@ from setuptools import setup
 # with open(VERSION_FILE, 'r') as f:
 #     VERSION = f.read().split()[2][1:-1]
 
-'''
+
 setup(
     name='coveralls',
     # version=VERSION,
@@ -49,4 +49,5 @@ setup(
         'Programming Language :: Python :: Implementation :: PyPy',
     ],
 )
+'''
 '''
