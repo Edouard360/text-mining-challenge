@@ -11,11 +11,11 @@ from setuptools import setup
 # with open(VERSION_FILE, 'r') as f:
 #     VERSION = f.read().split()[2][1:-1]
 
-
+'''
 setup(
     name='coveralls',
     # version=VERSION,
-    packages=['coveralls'],
+    #packages=['coveralls'],
     url='http://github.com/coveralls-clients/coveralls-python',
     license='MIT',
     author='coveralls-clients contributors',
@@ -49,3 +49,4 @@ setup(
         'Programming Language :: Python :: Implementation :: PyPy',
     ],
 )
+'''
