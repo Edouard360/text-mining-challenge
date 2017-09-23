@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/Edouard360/text-mining-challenge.svg?branch=master)](https://travis-ci.org/Edouard360/text-mining-challenge)
-[![Coverage Status](https://coveralls.io/repos/github/Edouard360/text-mining-challenge/badge.svg?branch=master)](https://coveralls.io/github/Edouard360/text-mining-challenge?branch=master)
 
+[![Coverage Status](https://coveralls.io/repos/github/Edouard360/text-mining-challenge/badge.svg?branch=master)](https://coveralls.io/github/Edouard360/text-mining-challenge?branch=master)
 # text-mining-challenge
 A text mining challenge from course INF582.  
 Please check out the [github version of our repository][link] for a tidier display of this README.md file !
