@@ -1,11 +1,12 @@
 from time import localtime, strftime
+
 import pandas as pd
-from classifier import Classifier
-from tools import random_sample
 from sklearn import metrics
-from sklearn.ensemble import RandomForestClassifier
+
+from classifier import Classifier
 from featureEngineering.FeatureExporter import FeatureExporter
 from featureEngineering.FeatureImporter import FeatureImporter
+from tools import random_sample
 
 time_sub = strftime("%Y-%m-%d %H:%M:%S", localtime()).replace(' ', '__')
 

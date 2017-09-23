@@ -1,8 +1,10 @@
 import os.path
+
 import numpy as np
 from scipy import sparse
-from featureEngineering.FeatureExtractor import FeatureExtractor
 from sklearn.metrics.pairwise import cosine_similarity
+
+from featureEngineering.FeatureExtractor import FeatureExtractor
 from featureEngineering.abstractFeatures.abstract_to_graph import abstractToGraph, tfIdfFeatures
 from featureEngineering.abstractFeatures.weighting_scheme import keepHighVarianceFeatures
 

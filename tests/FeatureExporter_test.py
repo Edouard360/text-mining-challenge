@@ -1,13 +1,14 @@
-from time import localtime, strftime
-import pandas as pd
-from featureEngineering.FeatureExporter import FeatureExporter
-#from featureEngineering.FeatureImporter import FeatureImporter
+# from featureEngineering.FeatureImporter import FeatureImporter
 import os
 import unittest
 
-class TestFoo(unittest.TestCase):
+import pandas as pd
 
-    #@patch('test1')
+from featureEngineering.FeatureExporter import FeatureExporter
+
+
+class TestFoo(unittest.TestCase):
+    # @patch('test1')
     def test_output_to_file(self):
         train_df = pd.read_csv("data/training_set_test.txt", sep=" ", header=None)
         train_df.columns = ["source", "target", "label"]
@@ -22,13 +23,13 @@ class TestFoo(unittest.TestCase):
         feature = features[0]
         exporter = FeatureExporter()
 
-        #assert FeatureImporter.check('training_set_test.txt', features=features) is False
+        # assert FeatureImporter.check('training_set_test.txt', features=features) is False
 
         exporter.computeFeature(train_df, node_information_df, feature)
         exporter.exportTo('training_set_test.txt', feature)
 
         self.assertTrue(os.path.isfile("featureEngineering/originalFeatures/output/training_set_test.txt"))
 
-#training_features = FeatureImporter.importFromFile(df_dict["train"]["filename"], features=features, **parameters)
+        # training_features = FeatureImporter.importFromFile(df_dict["train"]["filename"], features=features, **parameters)
 
-#test_output_to_file()
+        # test_output_to_file()
