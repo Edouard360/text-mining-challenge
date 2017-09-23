@@ -1,3 +1,7 @@
+"""
+Module docstring
+"""
+
 from time import localtime, strftime
 
 import pandas as pd

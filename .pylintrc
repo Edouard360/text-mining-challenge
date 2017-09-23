@@ -55,7 +55,7 @@ output-format=text
 # Put messages in a separate file for each module / package specified on the
 # command line instead of printing them on stdout. Reports (if any) will be
 # written in a file name "pylint_global.[txt|html]".
-files-output=no
+files-output=yes
 
 # Tells whether to display a full report or only the messages
 reports=yes
@@ -103,7 +103,7 @@ contextmanager-decorators=contextlib.contextmanager,contextlib2.contextmanager
 [VARIABLES]
 
 # Tells whether we should check for unused import in __init__ files.
-init-import=no
+init-import=yes
 
 # A regular expression matching the beginning of the name of dummy variables
 # (i.e. not used).
@@ -319,7 +319,7 @@ ignore-exceptions=AssertionError,NotImplementedError,StopIteration,TypeError
 indent-after-paren=4
 
 
-[GOOGLE LINES]
+[Louis LINES]
 
 # Regexp for a proper copyright notice.
-copyright=Copyright \d{4} Louis Rémus - Kayrros\. +All [Rr]ights [Rr]eserved\.
+copyright=Copyright \d{4} Louis R?mus\. +All [Rr]ights [Rr]eserved\.
