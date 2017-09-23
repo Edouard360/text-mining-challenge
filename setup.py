@@ -2,25 +2,25 @@ import os
 from setuptools import setup
 
 
-VERSION_FILE = os.path.join(os.path.abspath(os.path.dirname(__file__)),
-                            'coveralls', 'version.py')
+# VERSION_FILE = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+#                             'coveralls', 'version.py')
 
-DESCRIPTION = open('README.rst').read() + '\n\n' + open('CHANGELOG.md').read()
+# DESCRIPTION = open('README.rst').read() + '\n\n' + open('CHANGELOG.md').read()
 
-VERSION = None
-with open(VERSION_FILE, 'r') as f:
-    VERSION = f.read().split()[2][1:-1]
+# VERSION = None
+# with open(VERSION_FILE, 'r') as f:
+#     VERSION = f.read().split()[2][1:-1]
 
 
 setup(
     name='coveralls',
-    version=VERSION,
+    # version=VERSION,
     packages=['coveralls'],
     url='http://github.com/coveralls-clients/coveralls-python',
     license='MIT',
     author='coveralls-clients contributors',
     description='Show coverage stats online via coveralls.io',
-    long_description=DESCRIPTION,
+    # long_description=DESCRIPTION,
     entry_points={
         'console_scripts': [
             'coveralls = coveralls.cli:main',
