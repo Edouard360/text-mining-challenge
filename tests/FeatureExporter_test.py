@@ -21,7 +21,7 @@ def test_output_to_file():
 
     #assert FeatureImporter.check('training_set_test.txt', features=features) is False
 
-    exporter.computeFeature('training_set_test.txt', node_information_df, feature)
+    exporter.computeFeature(train_df, node_information_df, feature)
     exporter.exportTo('training_set_test.txt', feature)
 
     assert os.path.isfile("featureEngineering/originalFeatures/output/training_set_test.txt")
