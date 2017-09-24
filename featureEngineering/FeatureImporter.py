@@ -1,6 +1,8 @@
-from featureEngineering.FeatureExporter import FeatureExporter
-import pandas as pd
 import os.path
+
+import pandas as pd
+
+from featureEngineering.FeatureExporter import FeatureExporter
 
 
 class FeatureImporter:
@@ -11,6 +13,7 @@ class FeatureImporter:
     Then, FeatureImporter can simply import the file. The path can be like:
     'featureEngineering/lsaFeatures/output/testing_set.txt'
     """
+
     @staticmethod
     def importFromFile(filename, features=FeatureExporter.available_features.keys(), **kargs):
         path_list = FeatureExporter.pathListBuilder(filename, features=features, **kargs)

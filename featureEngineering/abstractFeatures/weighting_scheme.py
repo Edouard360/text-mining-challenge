@@ -1,5 +1,5 @@
-from scipy import sparse
 import numpy as np
+from scipy import sparse
 
 
 def computeTfidf(abstract_list, index_dict, unique_words):

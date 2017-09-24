@@ -1,7 +1,6 @@
-from sklearn.base import BaseEstimator
 import xgboost as xgb
-from tools import xgb_f1
 from matplotlib import pyplot
+from sklearn.base import BaseEstimator
 
 
 class Classifier(BaseEstimator):
@@ -50,7 +49,7 @@ class Classifier(BaseEstimator):
         ax.legend()
         pyplot.ylabel('Classification Error')
         pyplot.title('XGBoost Classification Error')
-#        pyplot.show()
+        #        pyplot.show()
         pyplot.savefig("report/figures/classification_error_learning_curve")
         # # plot f1 score
         # figures, ax = pyplot.subplots()
