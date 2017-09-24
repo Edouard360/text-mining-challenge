@@ -1,6 +1,7 @@
+import numpy as np
+
 from featureEngineering.FeatureExtractor import FeatureExtractor
 from tools_stemmer import remove_stopwords_and_stem
-import numpy as np
 
 
 class OriginalFeatureExtractor(FeatureExtractor):

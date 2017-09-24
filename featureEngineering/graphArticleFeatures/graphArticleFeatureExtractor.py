@@ -1,6 +1,7 @@
-from featureEngineering.FeatureExtractor import FeatureExtractor
 import numpy as np
 import pandas as pd
+
+from featureEngineering.FeatureExtractor import FeatureExtractor
 from tools import articles_graph
 
 
