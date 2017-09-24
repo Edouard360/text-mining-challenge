@@ -9,10 +9,10 @@ Welcome to text-mining-challenge's documentation!
 Contents:
 
 .. toctree::
-:maxdepth: 2
+    :maxdepth: 2
 
-       Test1
-       Test2
+    Test1
+    Test2
 
 
 Indices and tables
@@ -24,14 +24,14 @@ Indices and tables
 
 
 .. toctree::
-:maxdepth: 2
-       :caption: Contributors
+    :maxdepth: 2
+    :caption: Contributors
 
-       louis
-       edouard
+    louis
+    edouard
 
 .. toctree::
-:maxdepth: 2
-       :caption: Events
+    :maxdepth: 2
+    :caption: Events
 
-       events/index
+    events/index
