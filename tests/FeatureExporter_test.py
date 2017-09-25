@@ -17,7 +17,7 @@ from featureEngineering.FeatureExporter import FeatureExporter
 
 
 class TestExporter(unittest.TestCase):
-    @unittest.skip("No data downloaded")
+    @unittest.skip("Exporter.exportTo not working")
     def test_output_to_file(self):
         """
         Tests if our FeatureExporter correctly outputs to file
@@ -25,10 +25,10 @@ class TestExporter(unittest.TestCase):
         Returns: test case
 
         """
-        train_df = pd.read_csv("data/training_set_test.txt", sep=" ", header=None)
+        train_df = pd.read_csv("../data/training_set_test.txt", sep=" ", header=None)
         train_df.columns = ["source", "target", "label"]
 
-        node_information_df = pd.read_csv("data/node_information_test.csv", sep=",", header=None)
+        node_information_df = pd.read_csv("../data/node_information_test.csv", sep=",", header=None)
         node_information_df.columns = ["ID", "year", "title", "authors", "journalName", "abstract"]
         node_information_df = node_information_df.reset_index().set_index("ID")
         node_information_df["authors"].fillna("", inplace=True)
