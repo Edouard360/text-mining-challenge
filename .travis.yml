@@ -19,7 +19,7 @@ script:
   #- tox -e $(echo py$TRAVIS_PYTHON_VERSION | tr -d . | sed -e 's/pypypy/pypy/')-$COVPYYAML
   - coverage run --source=featureEngineering setup.py test
   - pylint main.py
-  - python -m unittest tests/FeatureExporter_test.py
+  - python -m unittest discover -v
 
 after_success:
   coveralls
