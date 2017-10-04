@@ -1,44 +1,38 @@
 theme: jekyll-theme-cayman
-
-defaults:
-  -
-    scope:
-      path: ""
-      type: "pages"
-    values:
-      layout: "page"
-      comments: true
-      search: true
-      sidebar: home_sidebar
-      topnav: topnav
-  -
-    scope:
-      path: ""
-      type: "tooltips"
-    values:
-      layout: "page"
-      comments: true
-      search: true
-      tooltip: true
-
-  -
-    scope:
-      path: ""
-      type: "posts"
-    values:
-      layout: "post"
-      comments: true
-      search: true
-      sidebar: home_sidebar
-      topnav: topnav
-
-# these are defaults used for the frontmatter for these file types
-
-sidebars:
-- mydoc_sidebar
-
-description: "Intended as a documentation theme based on Jekyll for technical writers documenting software and other technical products, this theme has all the elements you would need to handle multiple products with both multi-level sidebar navigation, tags, and other documentation features."
-# the description is used in the feed.xml file
-
-# needed for sitemap.xml file only
-url: http://idratherbewriting.com
+#
+#defaults:
+#  -
+#    scope:
+#      path: ""
+#      type: "pages"
+#    values:
+#      layout: "page"
+#      comments: true
+#      search: true
+#      sidebar: home_sidebar
+#      topnav: topnav
+#  -
+#    scope:
+#      path: ""
+#      type: "tooltips"
+#    values:
+#      layout: "page"
+#      comments: true
+#      search: true
+#      tooltip: true
+#
+#  -
+#    scope:
+#      path: ""
+#      type: "posts"
+#    values:
+#      layout: "post"
+#      comments: true
+#      search: true
+#      sidebar: home_sidebar
+#      topnav: topnav
+#
+## these are defaults used for the frontmatter for these file types
+#
+#sidebars:
+#- mydoc_sidebar
