@@ -1,38 +1,17 @@
-theme: jekyll-theme-cayman
-#
-#defaults:
-#  -
-#    scope:
-#      path: ""
-#      type: "pages"
-#    values:
-#      layout: "page"
-#      comments: true
-#      search: true
-#      sidebar: home_sidebar
-#      topnav: topnav
-#  -
-#    scope:
-#      path: ""
-#      type: "tooltips"
-#    values:
-#      layout: "page"
-#      comments: true
-#      search: true
-#      tooltip: true
-#
-#  -
-#    scope:
-#      path: ""
-#      type: "posts"
-#    values:
-#      layout: "post"
-#      comments: true
-#      search: true
-#      sidebar: home_sidebar
-#      topnav: topnav
-#
-## these are defaults used for the frontmatter for these file types
-#
-#sidebars:
-#- mydoc_sidebar
+# Setup
+title:        Project or Test name
+tagline:      A responsive theme for your project on GitHub Pages
+#baseurl:      ""
+#paginate:     1
+
+# About/contact
+author:
+  name:       Author name
+  url:        http://yourhomepage.com 
+
+# Gems
+#gems:
+#  - jekyll-paginate
+
+#Others
+#markdown: kramdown
