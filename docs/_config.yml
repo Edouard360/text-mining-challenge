@@ -7,7 +7,7 @@ tagline:      A responsive theme for your project on GitHub Pages
 # About/contact
 author:
   name:       Author name
-  url:        http://yourhomepage.com 
+  url:        http://yourhomepage.com
 
 # Gems
 #gems:
@@ -15,3 +15,21 @@ author:
 
 #Others
 #markdown: kramdown
+
+theme: jekyll-theme-slate
+
+#defaults:
+#  - scope:
+#      path: ""
+#      type: my_collection
+#    values:
+#      layout: page
+
+#collections:
+#  my_collection:
+#    output: true
+#    permalink: /:collection/:name
+collections:
+  my_collection:
+    output: true
+    permalink: /:collection/:name # This is just display
