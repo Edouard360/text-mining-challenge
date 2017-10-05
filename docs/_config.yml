@@ -1,35 +1,14 @@
 # Setup
-title:        Project or Test name
-tagline:      A responsive theme for your project on GitHub Pages
-#baseurl:      ""
-#paginate:     1
+theme: jekyll-theme-cayman
 
-# About/contact
+title:        Text Mining Challenge
+tagline:      A data science project
+
 author:
-  name:       Author name
-  url:        http://yourhomepage.com
+  name:       Edouard Mehlman
+  url:        edouard.mehlman@polytechnique.edu
 
-# Gems
-#gems:
-#  - jekyll-paginate
-
-#Others
-#markdown: kramdown
-
-theme: jekyll-theme-slate
-
-#defaults:
-#  - scope:
-#      path: ""
-#      type: my_collection
-#    values:
-#      layout: page
-
-#collections:
-#  my_collection:
-#    output: true
-#    permalink: /:collection/:name
 collections:
-  my_collection:
+  documentation:
     output: true
     permalink: /:collection/:name # This is just display

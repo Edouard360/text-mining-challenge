@@ -1,8 +1,0 @@
----
-layout: default
-title:  "This is THE LAST test!"
-date:   2016-02-16 17:50:00
----
-
-* THIS IS THE BITCH
-
